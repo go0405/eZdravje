@@ -30,30 +30,32 @@ function getSessionId() {
  * @param stPacienta zaporedna številka pacienta (1, 2 ali 3)
  * @return ehrId generiranega pacienta
  */
-function generirajPodatke() {
+ 
+ function prikaziTriSportnike(){
+ 	$("#tukajgenerira").append("Zgenerirani <strong>EHRid-ji</strong> so: ");
+ 	var ehrId1 = generirajPodatke(1);
+ 	var ehrId2 = generirajPodatke(2);
+ 	var ehrId3 = generirajPodatke(3);
+ }
+ 
+ 
+function generirajPodatke(stPacienta) {
   
   
   ehrId = "";
-
-$(document).ready(function() {
-
-	$('#izberiSportnika').change(function() {
-		$("#dodajMeritveSporocilo").html("");
-		var podatki = $(this).val().split("|");
-		$("#dodajVitalnoEHR").val(podatki[0]);
-		$("#dodajVitalnoDatumInUra").val(podatki[1]);
-		$("#dodajVitalnoTelesnaVisina").val(podatki[2]);
-		$("#dodajVitalnoTelesnaTeza").val(podatki[3]);
-		$("#dodajVitalnoTelesnaTemperatura").val(podatki[4]);
-		$("#dodajVitalnoKrvniTlakSistolicni").val(podatki[5]);
-		$("#dodajVitalnoKrvniTlakDiastolicni").val(podatki[6]);
-		$("#dodajVitalnoNasicenostKrviSKisikom").val(podatki[7]);
-		$("#dodajVitalnoSrcniUtrip").val(podatki[8]);
-	});
-
-}); 
-
- // return ehrId;
+	
+	
+	
+	if(stPacienta == 1){
+		$("#tukajgenerira").append("<strong>e9ea0e3e-8688-40c0-9a0a-4808d8df8a86</strong>, ");
+	}
+	if(stPacienta == 2){
+		$("#tukajgenerira").append("<strong>39348db6-e44c-439a-a29f-68edd274f5d9</strong> in ");
+	}
+	if(stPacienta == 3){
+		$("#tukajgenerira").append("<strong>b56977ee-b3bf-40cf-8641-9f8e2df113af</strong>.");
+	}
+	//return ehrId;
 }
 
 function kreirajEHR() {
@@ -225,21 +227,251 @@ var povp = 0;
 var stevec = 0;
 var povp2 = 0;
 
+function tezaPodrobno(){
+	sessionId = getSessionId();
+
+	var ehrId = $("#EHRSportnika").val();
+	$("#tezaIme").empty();
+
+		$.ajax({
+			url: baseUrl + "/demographics/ehr/" + ehrId + "/party",
+	    	type: 'GET',
+	    	headers: {"Ehr-Session": sessionId},
+	    	success: function (data) {
+				var party = data.party;
+					$.ajax({
+  					    url: baseUrl + "/view/" + ehrId + "/" + "weight",
+					    type: 'GET',
+					    headers: {"Ehr-Session": sessionId},
+					    success: function (res) {
+					    	if (res.length > 0) {
+						    	var results = "<table class='table table-striped " +
+                    "table-hover'><tr><th>Datum in ura</th>" +
+                    "<th class='text-right'>Telesna teža</th></tr>";
+						        for (var i in res) {
+						            results += "<tr><td>" + res[i].time +
+                          "</td><td class='text-right'>" + res[i].weight +
+                          " " + res[i].unit + "</td>";
+						        }
+						        results += "</table>";
+						        $("#tezaIme").append(results);
+					    	}
+					    }
+					});
+
+	    		}
+		});
+	
+}
+
+function temperaturaPodrobno(){	 
+	sessionId = getSessionId();
+
+	var ehrId = $("#EHRSportnika").val();
+	$("#temperaturaIme").empty();
+
+		$.ajax({
+			url: baseUrl + "/demographics/ehr/" + ehrId + "/party",
+	    	type: 'GET',
+	    	headers: {"Ehr-Session": sessionId},
+	    	success: function (data) {
+				var party = data.party;
+					$.ajax({
+  					    url: baseUrl + "/view/" + ehrId + "/" + "body_temperature",
+					    type: 'GET',
+					    headers: {"Ehr-Session": sessionId},
+					    success: function (res) {
+					    	if (res.length > 0) {
+						    	var results = "<table class='table table-striped " +
+                    "table-hover'><tr><th>Datum in ura</th>" +
+                    "<th class='text-right'>Telesna temperatura</th></tr>";
+						        for (var i in res) {
+						            results += "<tr><td>" + res[i].time +
+                          "</td><td class='text-right'>" + res[i].temperature +
+                          " " + res[i].unit + "</td>";
+						        }
+						        results += "</table>";
+						        $("#temperaturaIme").append(results);
+					    	}
+					    }
+					});
+
+	    		}
+		});
+}
+
+function sistolPodrobno(){
+		sessionId = getSessionId();
+
+	var ehrId = $("#EHRSportnika").val();
+	$("#sistolicniIme").empty();
+
+		$.ajax({
+			url: baseUrl + "/demographics/ehr/" + ehrId + "/party",
+	    	type: 'GET',
+	    	headers: {"Ehr-Session": sessionId},
+	    	success: function (data) {
+				var party = data.party;
+					$.ajax({
+  					    url: baseUrl + "/view/" + ehrId + "/" + "blood_pressure",
+					    type: 'GET',
+					    headers: {"Ehr-Session": sessionId},
+					    success: function (res) {
+					    	if (res.length > 0) {
+						    	var results = "<table class='table table-striped " +
+                    "table-hover'><tr><th>Datum in ura</th>" +
+                    "<th class='text-right'>Sistolični Tlak</th></tr>";
+						        for (var i in res) {
+						            results += "<tr><td>" + res[i].time +
+                          "</td><td class='text-right'>" + res[i].systolic +
+                          " " + res[i].unit + "</td>";
+						        }
+						        results += "</table>";
+						        $("#sistolicniIme").append(results);
+					    	}
+					    }
+					});
+
+	    		}
+		});
+}
+
+function diastolPodrobno(){
+		sessionId = getSessionId();
+
+	var ehrId = $("#EHRSportnika").val();
+	$("#diastolicniIme").empty();
+
+		$.ajax({
+			url: baseUrl + "/demographics/ehr/" + ehrId + "/party",
+	    	type: 'GET',
+	    	headers: {"Ehr-Session": sessionId},
+	    	success: function (data) {
+				var party = data.party;
+					$.ajax({
+  					    url: baseUrl + "/view/" + ehrId + "/" + "blood_pressure",
+					    type: 'GET',
+					    headers: {"Ehr-Session": sessionId},
+					    success: function (res) {
+					    	if (res.length > 0) {
+						    	var results = "<table class='table table-striped " +
+                    "table-hover'><tr><th>Datum in ura</th>" +
+                    "<th class='text-right'>Diastolični Tlak</th></tr>";
+						        for (var i in res) {
+						            results += "<tr><td>" + res[i].time +
+                          "</td><td class='text-right'>" + res[i].diastolic +
+                          " " + res[i].unit + "</td>";
+						        }
+						        results += "</table>";
+						        $("#diastolicniIme").append(results);
+					    	}
+					    }
+					});
+
+	    		}
+		});
+}
+
+function kisikPodrobno(){
+		sessionId = getSessionId();
+
+	var ehrId = $("#EHRSportnika").val();
+	$("#kisikIme").empty();
+
+		$.ajax({
+			url: baseUrl + "/demographics/ehr/" + ehrId + "/party",
+	    	type: 'GET',
+	    	headers: {"Ehr-Session": sessionId},
+	    	success: function (data) {
+				var party = data.party;
+					$.ajax({
+  					    url: baseUrl + "/view/" + ehrId + "/" + "spO2",
+					    type: 'GET',
+					    headers: {"Ehr-Session": sessionId},
+					    success: function (res) {
+					    	if (res.length > 0) {
+						    	var results = "<table class='table table-striped " +
+                    "table-hover'><tr><th>Datum in ura</th>" +
+                    "<th class='text-right'>Kisik v krvi</th></tr>";
+						        for (var i in res) {
+						            results += "<tr><td>" + res[i].time +
+                          "</td><td class='text-right'>" + res[i].spO2 +
+                          " %</td>";
+						        }
+						        results += "</table>";
+						        $("#kisikIme").append(results);
+					    	} 
+					    }
+					});
+
+	    		}
+		});
+}
+
+function utripPodrobno(){
+		sessionId = getSessionId();
+
+	var ehrId = $("#EHRSportnika").val();
+	$("#utripIme").empty();
+
+		$.ajax({
+			url: baseUrl + "/demographics/ehr/" + ehrId + "/party",
+	    	type: 'GET',
+	    	headers: {"Ehr-Session": sessionId},
+	    	success: function (data) {
+				var party = data.party;
+					$.ajax({
+  					    url: baseUrl + "/view/" + ehrId + "/" + "pulse",
+					    type: 'GET',
+					    headers: {"Ehr-Session": sessionId},
+					    success: function (res) {
+					    	if (res.length > 0) {
+						    	var results = "<table class='table table-striped " +
+                    "table-hover'><tr><th>Datum in ura</th>" +
+                    "<th class='text-right'>Srčni utrip</th></tr>";
+						        for (var i in res) {
+						            results += "<tr><td>" + res[i].time +
+                          "</td><td class='text-right'>" + res[i].pulse +
+                          " " + res[i].unit + "</td>";
+						        }
+						        results += "</table>";
+						        $("#utripIme").append(results);
+					    	} 
+								}
+		 });
+
+		}
+		});
+}
+
 function izracunajPovprecje() {
 	sessionId = getSessionId();
 
 	var ehrId = $("#EHRSportnika").val();
+	$("#tezaIme").empty();
+	$("#tezaTabela").empty();
+	$("#kategorijaIme").empty();
+	$("#kategorijaTabela").empty();
+    $("#temperaturaIme").empty();
+	$("#temperaturaTabela").empty();
+    $("#sistolicniIme").empty();
+	$("#sistolicniTabela").empty();
+	$("#diastolicniIme").empty();
+	$("#diastolicniTabela").empty();
+	$("#kisikIme").empty();
+	$("#kisikTabela").empty();
+	$("#utripIme").empty();
+	$("#utripTabela").empty();
 
 	$.ajax({
 		url: baseUrl + "/demographics/ehr/" + ehrId + "/party",
     	type: 'GET',
     	headers: {"Ehr-Session": sessionId},
     	success: function (data) {
-			var results = "<table class='table table-striped " +
-                   "table-hover'><tr><th>Kategorija</th>" +
-                   "<th class='text-right'>Povprečje</th></tr>";
 			var party = data.party;
 			$("#rezultatPovprecjaSportnika").html("<br/><span>Povprečje športnika <b>'" + party.firstNames + " " + party.lastNames + "'</b>.</span><br/><br/>");
+			$("#kategorijaIme").append("Kategorija");
+			$("#kategorijaTabela").append("Povprečje");
 			$.ajax({
 			    url: baseUrl + "/view/" + ehrId + "/" + "weight",
 			    type: 'GET',
@@ -251,7 +483,8 @@ function izracunajPovprecje() {
 				           stevec++;
 				        }
 				        povp /= stevec;
-				        results += "<tr><td>" + "Teža" + "</td><td class='text-right'>" + povp + " " + res[i].unit + "</td>";
+				        $("#tezaIme").append("<button onclick=tezaPodrobno()>Teža</button>");
+				        $("#tezaTabela").append(povp + " " + res[i].unit);
 				        stevec = 0;
 				        povp = 0;
 			    	} else {
@@ -278,7 +511,8 @@ function izracunajPovprecje() {
 					           stevec++;
 					        }
 					        povp /= stevec;
-					        results += "<tr><td>" + "<button onclick="+ "Hej you"+ ">Temperatura</button>" + "</td><td class='text-right'>" + povp + " " + res[i].unit + "</td>";
+					        $("#temperaturaIme").append("<button onclick=temperaturaPodrobno()>Temperatura</button>");
+				    		$("#temperaturaTabela").append(povp + " " + res[i].unit);
 					        stevec = 0;
 					        povp = 0;
 				    	} else {
@@ -307,8 +541,10 @@ function izracunajPovprecje() {
 				        }
 				        povp /= stevec;
 				        povp2 /= stevec;
-				        results += "<tr><td>" + "Sistolični tlak" + "</td><td class='text-right'>" + povp + " " + res[i].unit + "</td>";
-				        results += "<tr><td>" + "Diastolični tlak" + "</td><td class='text-right'>" + povp2 + " " + res[i].unit + "</td>";
+					        $("#sistolicniIme").append("<button onclick=sistolPodrobno()"+ ">Sistolični tlak</button>");
+				    		$("#sistolicniTabela").append(povp + " " + res[i].unit);
+					        $("#diastolicniIme").append("<button onclick=diastolPodrobno()"+ ">Diastolični tlak</button>");
+				    		$("#diastolicniTabela").append(povp2 + " " + res[i].unit);
 				        stevec = 0;
 				        povp = 0;
 				        povp2 = 0;
@@ -316,7 +552,7 @@ function izracunajPovprecje() {
 			    		$("#izracunajPovprecjeSporocilo").html(
                   "<span class='obvestilo label label-warning fade-in'>" +
                   "Ni podatkov!</span>");
-			    	}stevec3++;
+			    	}
 			    },
 			    error: function() {
 			    	$("#izracunajPovprecjeSporocilo").html(
@@ -336,7 +572,8 @@ function izracunajPovprecje() {
 				           stevec++;
 				        }
 				        povp /= stevec;
-				        results += "<tr><td>" + "Nasičenost krvi s kisikom" + "</td><td class='text-right'>" + povp +  " % </td>";
+					    $("#kisikIme").append("<button onclick=kisikPodrobno()"+ ">Kisik v krvi</button>");
+				    	$("#kisikTabela").append(povp + " %");
 				        stevec = 0;
 				        povp = 0;
 			    	} else {
@@ -364,11 +601,12 @@ function izracunajPovprecje() {
 				           stevec++;
 				        }
 				        povp /= stevec;
-				        results += "<tr><td>" + "Utrip" + "</td><td class='text-right'>" + povp + " " + res[i].unit + "</td>";
+						$("#utripIme").append("<button onclick=utripPodrobno()"+ ">Srčni utrip</button>");
+						$("#utripTabela").append(povp + " " + res[i].unit);
+				        
 				        stevec = 0;
 				        povp = 0;
-				       results += "</table>";
-				        $("#rezultatPovprecjaSportnika").append(results);
+
 			    	} else {
 			    		$("#izracunajPovprecjeSporocilo").html(
                   "<span class='obvestilo label label-warning fade-in'>" +
@@ -381,6 +619,7 @@ function izracunajPovprecje() {
                 JSON.parse(err.responseText).userMessage + "'!");
 			    }
 			});
+
     	}	
 	});
 }

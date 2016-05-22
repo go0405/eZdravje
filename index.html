@@ -10,6 +10,32 @@
   <script src="knjiznice/js/jquery-2.2.3.min.js"></script>
   <script src="knjiznice/js/bootstrap.min.js"></script>
   <script src="knjiznice/js/koda.js"></script>
+
+<style>
+#povprecno {
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+#povprecno td, #povprecno th {
+    border: 1px solid #182948;
+    text-align: left;
+    padding: 8px;
+}
+
+#povprecno tr:nth-child(even){background-color: #f2f2f2}
+
+#povprecno tr:hover {background-color: #ddd;}
+
+#povprecno th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    background-color:  #182948;
+    color: white;
+}
+</style>
+</style>
 </head>
 <body>
 
@@ -29,7 +55,7 @@
         <ul class="nav navbar-nav">
           <li><a href="opis.html">Opis ideje</a></li>
           <li><a href="nacrt.html">Načrt informacijske rešitve</a></li>
-          <li><a href="javascript:generirajPodatke()">Generiranje podatkov</a></li>
+          <li><a href="javascript:prikaziTriSportnike()">Generiranje podatkov</a></li>
         </ul>
       </div>
     </div>
@@ -39,6 +65,7 @@
   <!-- ZAČETEK: Vsebina aplikacije -->
   <body>
 		<div style="background-color: #182948; color:#FFFFFF; padding: 20px; font-family: Antiqua; font-size: 18px;" class="jumbotron"><h2>eTrening</h2></div>
+		<div id="tukajgenerira"></div><br>
 		<div class="row">
 			<div class="col-lg-6 col-md-6 col-sm-6">
 				<div style="border-color: #182948;" class="panel panel-default">
@@ -63,16 +90,15 @@
 					<div style="color: #ffffff; background-color: #182948; font-family: Lucida Sans Unicode;" class="panel-heading">
 						<div class="row">
 							<div class="col-lg-4 col-md-4 col-sm-4">Vnos <b>meritev</b>:</b></div>
-							<div class="col-lg-4 col-md-4 col-sm-4"><select class="form-control input-sm" id="izberiSportnika"><option value=""></option><option value="b931580f-2b05-488b-985b-8d9ffb08ad02|2014-11-21T11:40|182|80.0|36.50|118|92|98|70.0">Marco Reus</option></select></div>
 						</div>
 					</div>
 					<div class="panel-body">
-						<div class="input-group"><span class="input-group-addon">EHR ID</span><input id="dodajVitalnoEHR" type="text" class="form-control input-mini" placeholder="7b661e12-3a98-21ad-c29e-2dc9f5a3d885"></span></div>
-						<div class="input-group"><span class="input-group-addon">Datum in ura</span><input id="dodajVitalnoDatumInUra" type="text" class="form-control input-mini" placeholder="2014-11-21T11:40Z"></span></div>
-						<div class="input-group"><span class="input-group-addon">Telesna višina</span><input id="dodajVitalnoTelesnaVisina" type="text" class="form-control input-mini" placeholder="185"><span class="input-group-addon">cm</span></div>
-						<div class="input-group"><span class="input-group-addon">Telesna teža</span><input id="dodajVitalnoTelesnaTeza" type="text" class="form-control input-mini" placeholder="80.00"><span class="input-group-addon">kg</span></div>
+						<div class="input-group"><span class="input-group-addon">EHR ID</span><input id="dodajVitalnoEHR" type="text" class="form-control input-mini" placeholder="315cc752-ce25-48a1-8f6c-4fe9e118233e"></span></div>
+						<div class="input-group"><span class="input-group-addon">Datum in ura</span><input id="dodajVitalnoDatumInUra" type="text" class="form-control input-mini" placeholder="2014-12-21T11:40Z"></span></div>
+						<div class="input-group"><span class="input-group-addon">Telesna višina</span><input id="dodajVitalnoTelesnaVisina" type="text" class="form-control input-mini" placeholder="175"><span class="input-group-addon">cm</span></div>
+						<div class="input-group"><span class="input-group-addon">Telesna teža</span><input id="dodajVitalnoTelesnaTeza" type="text" class="form-control input-mini" placeholder="60.00"><span class="input-group-addon">kg</span></div>
 					  <div class="input-group"><span class="input-group-addon">Telesna temperatura</span><input id="dodajVitalnoTelesnaTemperatura" type="text" class="form-control input-mini" placeholder="36.50"><span class="input-group-addon">°C</span></div>
-						<div class="input-group"><span class="input-group-addon">Sistolični krvni tlak</span><input id="dodajVitalnoKrvniTlakSistolicni" type="text" class="form-control input-mini" placeholder="118"><span class="input-group-addon">mm Hg</span></div>
+						<div class="input-group"><span class="input-group-addon">Sistolični krvni tlak</span><input id="dodajVitalnoKrvniTlakSistolicni" type="text" class="form-control input-mini" placeholder="108"><span class="input-group-addon">mm Hg</span></div>
 					  <div class="input-group"><span class="input-group-addon">Diastolični krvni tlak</span><input id="dodajVitalnoKrvniTlakDiastolicni" type="text" class="form-control input-mini" placeholder="92"><span class="input-group-addon">mm Hg</span></div>
 						<div class="input-group"><span class="input-group-addon">Nasičenost krvi s kisikom</span><input id="dodajVitalnoNasicenostKrviSKisikom" type="text" class="form-control input-mini" placeholder="98"><span class="input-group-addon">%</span></div>
 						<div class="input-group"><span class="input-group-addon">Srčni Utrip</span><input id="dodajVitalnoSrcniUtrip" type="text" class="form-control input-mini" placeholder="60.0"><span class="input-group-addon">/min</span></div>
@@ -92,15 +118,48 @@
 					<div style="color: #ffffff; background-color: #182948; font-family: Lucida Sans Unicode;" class="panel-heading">
 						<div class="row">
 							<div class="col-lg-4 col-md-4 col-sm-4">Pregled <b>povprečja</b> meritev:</div>
+							<div class="col-lg-4 col-md-4 col-sm-4"><select class="form-control input-sm" id="izberiSportnika"><option value=""></option><option value="b931580f-2b05-488b-985b-8d9ffb08ad02">Marco Reus</option></select></div>
 
 						</div>
 					</div>
 					<div style="border-color: #182948;" class="panel-body">
 						<div class="input-group"><span class="input-group-addon">EHR ID</span><input id="EHRSportnika" type="text" class="form-control input-mini" placeholder="7b661e12-3a98-21ad-c29e-2dc9f5a3d885"></div>
+						
 						<br>
 						<button type="button" style="border: 3px solid #0a3c59; color:#FFFFFF; background: #3e779d; margin:auto; display:block; padding: 4.5px 9px; -webkit-border-radius: 30px; -moz-border-radius: 30px;"
 						class="btn btn-default" onclick="izracunajPovprecje()">Preveri povprečje</button><span id="izracunajPovprecjeSporocilo"></span>
 						<div id="rezultatPovprecjaSportnika"></div>
+						<br>
+						<table id="povprecno" style="width:100%">
+					  <tr>
+					    <th><div id="kategorijaIme"></div></th>
+					    <th><div id="kategorijaTabela"></div></th>
+					  </tr>
+					  <tr>
+					    <td><div id="tezaIme"></div></td>
+					    <td><div id="tezaTabela"></div></td>
+					  </tr>
+					  <tr>
+					    <td><div id="temperaturaIme"></div></td>
+					    <td><div id="temperaturaTabela"></div></td>
+					  </tr>
+					  <tr>
+					    <td><div id="sistolicniIme"></div></td>
+					    <td><div id="sistolicniTabela"></div></td>
+					  </tr>
+					  <tr>
+					    <td><div id="diastolicniIme"></div></td>
+					    <td><div id="diastolicniTabela"></div></td>
+					  </tr>
+					  <tr>
+					    <td><div id="kisikIme"></div></td>
+					    <td><div id="kisikTabela"></div></td>
+					  </tr>
+					  <tr>
+					    <td><div id="utripIme"></div></td>
+					    <td><div id="utripTabela"></div></td>
+					  </tr>
+						</table>
 				  	</div>
 				</div>
 			</div>
