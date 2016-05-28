@@ -6,36 +6,40 @@
   <link href="knjiznice/css/bootstrap.min.css" rel="stylesheet">
   <style>
     body {padding-top: 70px;}
-  </style>
-  <script src="knjiznice/js/jquery-2.2.3.min.js"></script>
-  <script src="knjiznice/js/bootstrap.min.js"></script>
-  <script src="knjiznice/js/koda.js"></script>
-
-<style>
-#povprecno {
+    
+    #povprecno {
     font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
     border-collapse: collapse;
     width: 100%;
-}
+	}
 
-#povprecno td, #povprecno th {
+	#povprecno td, #povprecno th {
     border: 1px solid #182948;
     text-align: left;
     padding: 8px;
-}
+	}
 
-#povprecno tr:nth-child(even){background-color: #f2f2f2}
+	#povprecno tr:nth-child(even){background-color: #f2f2f2}
 
-#povprecno tr:hover {background-color: #ddd;}
+	#povprecno tr:hover {background-color: #ddd;}
 
-#povprecno th {
+	#povprecno th {
     padding-top: 12px;
     padding-bottom: 12px;
     background-color:  #182948;
     color: white;
-}
-</style>
-</style>
+ 
+	}
+	
+
+  </style>
+
+  <script src="knjiznice/js/jquery-2.2.3.min.js"></script>
+  <script src="knjiznice/js/bootstrap.min.js"></script>
+  <script src="knjiznice/js/koda.js"></script>
+
+  <script src="//d3js.org/d3.v3.min.js"></script>
+
 </head>
 <body>
 
@@ -104,10 +108,12 @@
 						<div class="input-group"><span class="input-group-addon">Srčni Utrip</span><input id="dodajVitalnoSrcniUtrip" type="text" class="form-control input-mini" placeholder="60.0"><span class="input-group-addon">/min</span></div>
 						<br>
 						<button type="button" style="border: 3px solid #0a3c59; color:#FFFFFF; background: #3e779d; margin:auto; display:block; padding: 4.5px 9px; -webkit-border-radius: 30px; -moz-border-radius: 30px;"
-						class="btn btn-default" onclick="dodajMeritve()">Dodaj meritve</button><span id="dodajMeritveSporocilo"></span>
+						class="btn btn-default" onclick="dodajMeritve()">Dodaj meritve in preveri stanje</button><span id="dodajMeritveSporocilo"></span>
 						<br>
 						<div id="opisanoStanje"></div>
 						<div id="opisanoStanje2"></div>
+
+						<div id="graf"></div>
 				</div>
 			</div>
 			
@@ -118,12 +124,13 @@
 					<div style="color: #ffffff; background-color: #182948; font-family: Lucida Sans Unicode;" class="panel-heading">
 						<div class="row">
 							<div class="col-lg-4 col-md-4 col-sm-4">Pregled <b>povprečja</b> meritev:</div>
-							<div class="col-lg-4 col-md-4 col-sm-4"><select class="form-control input-sm" id="izberiSportnika"><option value=""></option><option value="b931580f-2b05-488b-985b-8d9ffb08ad02">Marco Reus</option></select></div>
+							
+							<div class="col-lg-4 col-md-4 col-sm-4"><select class="form-control" id="izberiSportnika"><option value=""></option></select></div>
 
 						</div>
 					</div>
 					<div style="border-color: #182948;" class="panel-body">
-						<div class="input-group"><span class="input-group-addon">EHR ID</span><input id="EHRSportnika" type="text" class="form-control input-mini" placeholder="7b661e12-3a98-21ad-c29e-2dc9f5a3d885"></div>
+						<div class="input-group"><span class="input-group-addon">EHR ID</span><input id="EHRSportnika" type="text" class="form-control input-sm" placeholder="7b661e12-3a98-21ad-c29e-2dc9f5a3d885"></div>
 						
 						<br>
 						<button type="button" style="border: 3px solid #0a3c59; color:#FFFFFF; background: #3e779d; margin:auto; display:block; padding: 4.5px 9px; -webkit-border-radius: 30px; -moz-border-radius: 30px;"
@@ -161,9 +168,13 @@
 					  </tr>
 						</table>
 				  	</div>
+
+				  	
 				</div>
-			</div>
-		</div>
+				
+
+				
+		
 	</body>
   <!-- KONEC: Vsebina aplikacije -->
 

@@ -5,7 +5,6 @@ var queryUrl = baseUrl + '/query';
 var username = "ois.seminar";
 var password = "ois4fri";
 
-
 /**
  * Prijava v sistem z privzetim uporabnikom za predmet OIS in pridobitev
  * enolične ID številke za dostop do funkcionalnosti
@@ -32,31 +31,109 @@ function getSessionId() {
  */
  
  function prikaziTriSportnike(){
- 	$("#tukajgenerira").append("Zgenerirani <strong>EHRid-ji</strong> so: ");
+
+ 	$("#tukajgenerira").empty();
+ 	var x = document.getElementById("izberiSportnika");
+    x.remove(1);
+    x.remove(1);
+    x.remove(1);
+
  	var ehrId1 = generirajPodatke(1);
  	var ehrId2 = generirajPodatke(2);
  	var ehrId3 = generirajPodatke(3);
+ 	
+ 	//$("#tukajgenerira").append("Zgenerirani <strong>EHRid-ji</strong> so: <strong>"+ ehrId1 +"</strong>, <strong>"+ ehrId2 +"</strong> in <strong>"+ ehrId3 +"</strong>");
+
  }
  
+ $(document).ready(function() {
+ 		$('#izberiSportnika').change(function() {
+		$("#EHRSportnika").val($(this).val());
+	});
+ });
  
-function generirajPodatke(stPacienta) {
-  
-  
-  ehrId = "";
+function generirajPodatke(sportnik) {
+
 	
+	if(sportnik == 1){
+		$("#tukajgenerira").append("Zgenerirani <strong>EHRid-ji</strong> so: ");
+		var sel = document.getElementById("izberiSportnika");
+		var opt = document.createElement("option");
+		opt.value = "91bcd74e-9be2-4531-a3d5-c8c8347369ea";
+		opt.text = "Tina Maze";
+		sel.add(opt, null);
+	}
+	if(sportnik == 2){
+        var sel = document.getElementById("izberiSportnika");
+		var opt = document.createElement("option");
+		opt.value = "a53d5962-b614-4cc0-8684-64518d7e3f7f";
+		opt.text = "Kevin Kampl";
+		sel.add(opt, null);
+	}
+	if(sportnik == 3){
+        var sel = document.getElementById("izberiSportnika");
+		var opt = document.createElement("option");
+		opt.value = "19bf76fa-1495-44d0-b008-380a85d3874e";
+		opt.text = "Goran Dragič";
+		sel.add(opt, null);
+	}
+
+    var ehrId = "";
+    var sessionId = getSessionId();
+
+    var ime, priimek, datumRojstva, spol;
+
+    if (sportnik == 1) {
+        ime = "Roger";
+    	priimek = "Federer";
+    	spol = "MALE";
+    	datumRojstva = "1972-03-02T12:22";
+    } else if (sportnik == 2) {
+        ime = "Anže";
+    	priimek = "Kopitar";
+    	spol = "MALE";
+    	datumRojstva = "1983-07-12T15:01";
+    } else if (sportnik == 3) {
+        ime = "Jaka";
+    	priimek = "Hvala";
+    	spol = "MALE";
+    	datumRojstva = "1991-01-01T22:03";
+    }
 	
-	
-	if(stPacienta == 1){
-		$("#tukajgenerira").append("<strong>e9ea0e3e-8688-40c0-9a0a-4808d8df8a86</strong>, ");
-	}
-	if(stPacienta == 2){
-		$("#tukajgenerira").append("<strong>39348db6-e44c-439a-a29f-68edd274f5d9</strong> in ");
-	}
-	if(stPacienta == 3){
-		$("#tukajgenerira").append("<strong>b56977ee-b3bf-40cf-8641-9f8e2df113af</strong>.");
-	}
-	//return ehrId;
+
+	$.ajaxSetup({
+	    headers: {"Ehr-Session": sessionId}
+	});
+	$.ajax({
+	    url: baseUrl + "/ehr",
+	    type: 'POST',
+	    success: function (data) {
+	        var ehrId = data.ehrId;
+	        var partyData = {
+	            firstNames: ime,
+	            lastNames: priimek,
+	            gender: spol,
+	            dateOfBirth: datumRojstva,
+	            partyAdditionalInfo: [{key: "ehrId", value: ehrId}]
+	        };
+	        $.ajax({
+	            url: baseUrl + "/demographics/party",
+	            type: 'POST',
+	            contentType: 'application/json',
+	            data: JSON.stringify(partyData),
+	            success: function (party) {
+					$("#tukajgenerira").append("<strong>"+ ehrId +" </strong>     " + "  ");
+	            },
+	            error: function(err) {
+	                $("#kreirajSporocilo").html("<span class='alert alert-info-sm'>Napaka '" +
+                    JSON.parse(err.responseText).userMessage + "'!");
+	            }
+	        });
+	    }
+	});
+	return ehrId;
 }
+
 
 function kreirajEHR() {
 	sessionId = getSessionId();
@@ -93,7 +170,7 @@ function kreirajEHR() {
 		            success: function (party) {
 		                if (party.action == 'CREATE') {
 		                    $("#kreirajSporocilo").html("<span class='alert alert-info-sm'>Uspešno kreiran EHR '" +
-                          ehrId + "'.</span>");
+                          	ehrId + "'.</span>");
 		                    $("#preberiEHRid").val(ehrId);
 		                }
 		            },
@@ -177,9 +254,117 @@ function dodajMeritve() {
 		stanje = "Športnik je v odličnem stanju za trening! "
 	}
 	
+	$("#dodajMeritveSporocilo").empty();
+	$("#graf").empty();
+	
 	stevec2 = 0;
+
+	graf(sistolicniKrvniTlak, diastolicniKrvniTlak, nasicenostKrviSKisikom, srcniUtrip);
 	
-	
+	function graf(sistol, diastol, kisik, utrip){
+ 
+        var w = 600;
+        var h = 300;
+        var padding = 30;
+        
+
+        var xScale = d3.scale.linear().domain([0, 12]).range([padding, w - padding]);
+        var yScale = d3.scale.linear().domain([50, 150]).range([h - padding, padding]);
+       
+
+        var svg = d3.select("#graf").append("svg").style("border", "1px solid #182948").style("background-color", "white").attr("width", w).attr("height", h);
+       
+
+        var xAxis = d3.svg.axis()
+            .scale(xScale)
+            .orient("bottom")
+            .ticks(10);
+       
+        var yAxis = d3.svg.axis()
+            .scale(yScale)
+            .orient("left")
+            .ticks(10);
+            
+		svg.append("rect")
+        .attr("x", 70)
+        .attr("y", 190)
+        .attr("width", 30)
+        .attr("height", 100)
+        .attr("fill", "#182948");
+        
+        svg.append("rect")
+        .attr("x", 170)
+        .attr("y", 190)
+        .attr("width", 30)
+        .attr("height", 100)
+        .attr("fill", "#182948");
+        
+        svg.append("rect")
+        .attr("x", 270)
+        .attr("y", 190)
+        .attr("width", 30)
+        .attr("height", 100)
+        .attr("fill", "#182948");
+        
+        svg.append("rect")
+        .attr("x", 370)
+        .attr("y", 190)
+        .attr("width", 30)
+        .attr("height", 100)
+        .attr("fill", "#182948");
+
+
+/*       var rectangle = svg.append("rect")
+                             .attr("x", 10)
+                            .attr("y", 10)
+                            .attr("width", 50)
+                            .attr("height", 100);*/
+        svg.append("g")
+        .attr("class", "axis")
+        .attr("transform", "translate(" + padding + ",0)")
+        .style("fill","#182948")
+        .call(yAxis);
+       
+        svg.append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 40)
+        .attr("x",60 - (h / 2))
+        .attr("dy", "1em")
+        .style("text-anchor", "start")
+        .style("fill","#182948")
+        .text("Vrednost");
+               
+        svg.append("text")
+        .attr("x", 70)
+        .attr("y", 190)
+        .style("fill","black")
+        .style("text-anchor", "start")
+        .text("Sistolični krvni tlak");
+       
+        svg.append("text")
+        .attr("x", 170)
+        .attr("y", 190)
+        .style("fill","black")
+        .style("text-anchor", "start")
+        .text("Diastolični krvni tlak");
+       
+        svg.append("text")
+        .attr("x", 270)
+        .attr("y", 190)
+        .style("fill","black")
+        .style("text-anchor", "start")
+        .text("Nasičenost krvi s kisikom");
+        
+        svg.append("text")
+        .attr("x", 370)
+        .attr("y", 190)
+        .style("fill","black")
+        .style("text-anchor", "start")
+        .text("Srčni utrip");
+
+}
+
+
 	if (!ehrId || ehrId.trim().length == 0) {
 		$("#dodajMeritveSporocilo").html("<span class='alert alert-info-sm'>Prosim vnesite zahtevane podatke!</span>");
 	} else {
@@ -462,6 +647,7 @@ function izracunajPovprecje() {
 	$("#kisikTabela").empty();
 	$("#utripIme").empty();
 	$("#utripTabela").empty();
+	$("#izracunajPovprecjeSporocilo").empty();
 
 	$.ajax({
 		url: baseUrl + "/demographics/ehr/" + ehrId + "/party",
@@ -489,13 +675,13 @@ function izracunajPovprecje() {
 				        povp = 0;
 			    	} else {
 			    		$("#izracunajPovprecjeSporocilo").html(
-                  "<span class='obvestilo label label-warning fade-in'>" +
+                  "<span class='alert alert-info-sm'>" +
                   "Ni podatkov!</span>");
 			    	}
 			    },
 			    error: function() {
 			    	$("#izracunajPovprecjeSporocilo").html(
-                "<span class='obvestilo label label-danger fade-in'>Napaka '" +
+                "<span class='alert alert-info-sm'>Napaka '" +
                 JSON.parse(err.responseText).userMessage + "'!");
 			    }
 			});
@@ -517,13 +703,13 @@ function izracunajPovprecje() {
 					        povp = 0;
 				    	} else {
 				    		$("#izracunajPovprecjeSporocilo").html(
-	                  "<span class='obvestilo label label-warning fade-in'>" +
+	                  "<span class='alert alert-info-sm'>" +
 	                  "Ni podatkov!</span>");
 				    	}
 				    },
 				    error: function() {
 				    	$("#izracunajPovprecjeSporocilo").html(
-	                "<span class='obvestilo label label-danger fade-in'>Napaka '" +
+	                "<span class='alert alert-info-sm'>Napaka '" +
 	                JSON.parse(err.responseText).userMessage + "'!");
 				    }
 				});
@@ -550,13 +736,13 @@ function izracunajPovprecje() {
 				        povp2 = 0;
 				    	} else {
 			    		$("#izracunajPovprecjeSporocilo").html(
-                  "<span class='obvestilo label label-warning fade-in'>" +
+                  "<span class='alert alert-info-sm'>" +
                   "Ni podatkov!</span>");
 			    	}
 			    },
 			    error: function() {
 			    	$("#izracunajPovprecjeSporocilo").html(
-                "<span class='obvestilo label label-danger fade-in'>Napaka '" +
+                "<span class='alert alert-info-sm'>Napaka '" +
                 JSON.parse(err.responseText).userMessage + "'!");
 			    }
 			});
@@ -578,13 +764,13 @@ function izracunajPovprecje() {
 				        povp = 0;
 			    	} else {
 			    		$("#izracunajPovprecjeSporocilo").html(
-                  "<span class='obvestilo label label-warning fade-in'>" +
+                  "<span class='alert alert-info-sm'>" +
                   "Ni podatkov!</span>");
 			    	}
 			    },
 			    error: function() {
 			    	$("#izracunajPovprecjeSporocilo").html(
-                "<span class='obvestilo label label-danger fade-in'>Napaka '" +
+                "<span class='alert alert-info-sm'>Napaka '" +
                 JSON.parse(err.responseText).userMessage + "'!");
 			    }
 			});
@@ -609,13 +795,13 @@ function izracunajPovprecje() {
 
 			    	} else {
 			    		$("#izracunajPovprecjeSporocilo").html(
-                  "<span class='obvestilo label label-warning fade-in'>" +
+                  "<span class='alert alert-info-sm'>" +
                   "Ni podatkov!</span>");
 			    	}
 			    },
 			    error: function() {
 			    	$("#pizracunajPovprecjeSporocilo").html(
-                "<span class='obvestilo label label-danger fade-in'>Napaka '" +
+                "<span class='alert alert-info-sm'>Napaka '" +
                 JSON.parse(err.responseText).userMessage + "'!");
 			    }
 			});
