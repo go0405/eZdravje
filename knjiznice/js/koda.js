@@ -212,22 +212,18 @@ function dodajMeritve() {
 		stanje += "BMI športnika je prevelik, za naslednji trening svetujem kardio. "; stevec2++;
 	}if(telesnaVisina > parseInt(telesnaTeza) + 110){
 		stanje += "BMI športnika je premajhen, potrebno je uživanje ogljikovih hidratov. "; stevec2++;
-	}if(sistolicniKrvniTlak >= 160){
+	}if(sistolicniKrvniTlak >= 180){
+		stanje += "Športnikov sistolični krvni tlak je šel čez vse meje. Nujno k zdravniku. "; stevec2++;
+	}else if(sistolicniKrvniTlak >= 160){
 		stanje += "Športnikov sistolični krvni tlak je precej previsok. Posvetujte se z zdravnikom. "; stevec2++;
-	}else if(sistolicniKrvniTlak >= 150){
+	}else if(sistolicniKrvniTlak > 140){
 		stanje += "Športnikov sistolični krvni tlak je malenkost previsok. Opazujte naslednjo meritev. "; stevec2++;
-	}if(sistolicniKrvniTlak <= 90){
-		stanje += "Športnikov sistolični krvni tlak je precej prenizek. Posvetujte se z zdravnikom. "; stevec2++;
-	}else if(sistolicniKrvniTlak <= 100){
-		stanje += "Športnikov sistolični krvni tlak je malenkost prenizek. Opazujte naslednjo meritev. "; stevec2++;
-	}if(diastolicniKrvniTlak >= 100){
+	}if(diastolicniKrvniTlak >= 110){
+		stanje += "Športnikov diastolični krvni tlak je šel čez vse meje. Nujno k zdravniku. "; stevec2++;
+	}else if(diastolicniKrvniTlak >= 100){
 		stanje += "Športnikov diastolični krvni tlak je precej previsok. Posvetujte se z zdravnikom. "; stevec2++;
-	}else if(diastolicniKrvniTlak >= 95){
+	}else if(diastolicniKrvniTlak > 90){
 		stanje += "Športnikov diastolični krvni tlak je malenkost previsok. Opazujte naslednjo meritev. "; stevec2++;
-	}if(diastolicniKrvniTlak <= 50){
-		stanje += "Športnikov diastolični krvni tlak je precej prenizek. Posvetujte se z zdravnikom. "; stevec2++;
-	}else if(diastolicniKrvniTlak <= 55){
-		stanje += "Športnikov diastolični krvni tlak je malenkost prenizek. Opazujte naslednjo meritev. "; stevec2++;
 	}if(nasicenostKrviSKisikom <= 85){
 		stanje += "Športnik ima v krvi premalo kisika. Nujno pojdite k zdravniku. "; stevec2++;
 	}else if(nasicenostKrviSKisikom <= 90){
@@ -259,66 +255,151 @@ function dodajMeritve() {
 	
 	stevec2 = 0;
 
-	graf(sistolicniKrvniTlak, diastolicniKrvniTlak, nasicenostKrviSKisikom, srcniUtrip);
-	
+
 	function graf(sistol, diastol, kisik, utrip){
- 
-        var w = 600;
+ 		var sis = ((sistol - 50)*2) + 27;
+ 		var dis = ((diastol - 50)*2) + 27;
+ 		var kis = ((kisik - 50)*2) + 27;
+ 		var utp = ((utrip - 50)*2) + 27;
+        var w = 500;
         var h = 300;
         var padding = 30;
         
-
-        var xScale = d3.scale.linear().domain([0, 12]).range([padding, w - padding]);
-        var yScale = d3.scale.linear().domain([50, 150]).range([h - padding, padding]);
+        var yScale = d3.scale.linear().domain([50, 170]).range([h - padding, padding]);
        
 
-        var svg = d3.select("#graf").append("svg").style("border", "1px solid #182948").style("background-color", "white").attr("width", w).attr("height", h);
-       
+        var svg = d3.select("#graf")
+        				.append("svg")
+        				.style("border", "1px solid #182948")
+        				.style("background-color", "white")
+        				.attr("width", w)
+        				.attr("height", h)
 
-        var xAxis = d3.svg.axis()
-            .scale(xScale)
-            .orient("bottom")
-            .ticks(10);
-       
         var yAxis = d3.svg.axis()
             .scale(yScale)
             .orient("left")
             .ticks(10);
-            
-		svg.append("rect")
+           
+        //sistol    
+        svg.append("rect")
         .attr("x", 70)
-        .attr("y", 190)
-        .attr("width", 30)
-        .attr("height", 100)
+        .attr("y", h - sis)
+        .attr("width", 50)
+        .attr("height", sis)
         .attr("fill", "#182948");
         
+        svg.append("line")
+        .attr("x1", 60)
+        .attr("y1", h-207)
+        .attr("x2", 130)
+        .attr("y2",  h-207)
+        .attr("stroke-width", 2)
+        .attr("stroke", "black");    
+        
+        svg.append("line")
+        .attr("x1", 60)
+        .attr("y1", h-247)
+        .attr("x2", 130)
+        .attr("y2",  h-247)
+        .attr("stroke-width", 2)
+        .attr("stroke", "#D7D700");   
+        
+        svg.append("line")
+        .attr("x1", 60)
+        .attr("y1", h-287)
+        .attr("x2", 130)
+        .attr("y2",  h-287)
+        .attr("stroke-width", 2)
+        .attr("stroke", "red");   
+
+        //diastol
         svg.append("rect")
         .attr("x", 170)
-        .attr("y", 190)
-        .attr("width", 30)
-        .attr("height", 100)
+        .attr("y", h - dis)
+        .attr("width", 50)
+        .attr("height", dis)
         .attr("fill", "#182948");
         
+        svg.append("line")
+        .attr("x1", 160)
+        .attr("y1", h-107)
+        .attr("x2", 230)
+        .attr("y2",  h-107)
+        .attr("stroke-width", 2)
+        .attr("stroke", "black");    
+        
+        svg.append("line")
+        .attr("x1", 160)
+        .attr("y1", h-127)
+        .attr("x2", 230)
+        .attr("y2",  h-127)
+        .attr("stroke-width", 2)
+        .attr("stroke", "#D7D700");   
+        
+        svg.append("line")
+        .attr("x1", 160)
+        .attr("y1", h-147)
+        .attr("x2", 230)
+        .attr("y2",  h-147)
+        .attr("stroke-width", 2)
+        .attr("stroke", "red");   
+
+        //kisik
         svg.append("rect")
         .attr("x", 270)
-        .attr("y", 190)
-        .attr("width", 30)
-        .attr("height", 100)
+        .attr("y", h - kis)
+        .attr("width", 50)
+        .attr("height",  kis)
         .attr("fill", "#182948");
         
+        svg.append("line")
+        .attr("x1", 260)
+        .attr("y1", h-97)
+        .attr("x2", 330)
+        .attr("y2",  h-97)
+        .attr("stroke-width", 2)
+        .attr("stroke", "#D600D6");    
+        
+        svg.append("line")
+        .attr("x1", 260)
+        .attr("y1", h-107)
+        .attr("x2", 330)
+        .attr("y2",  h-107)
+        .attr("stroke-width", 2)
+        .attr("stroke", "#00D6D6");   
+
+        //utrip
         svg.append("rect")
         .attr("x", 370)
-        .attr("y", 190)
-        .attr("width", 30)
-        .attr("height", 100)
+        .attr("y", h -  utp)
+        .attr("width", 50)
+        .attr("height",  utp)
         .attr("fill", "#182948");
+        
+        svg.append("line")
+        .attr("x1", 360)
+        .attr("y1", h-37)
+        .attr("x2", 430)
+        .attr("y2",  h-37)
+        .attr("stroke-width", 2)
+        .attr("stroke", "#D600D6");    
+        
+        svg.append("line")
+        .attr("x1", 360)
+        .attr("y1", h-147)
+        .attr("x2", 430)
+        .attr("y2",  h-147)
+        .attr("stroke-width", 2)
+        .attr("stroke", "#D7D700");   
 
+		svg.append("line")
+        .attr("x1", 360)
+        .attr("y1", h-187)
+        .attr("x2", 430)
+        .attr("y2",  h-187)
+        .attr("stroke-width", 2)
+        .attr("stroke", "red"); 
 
-/*       var rectangle = svg.append("rect")
-                             .attr("x", 10)
-                            .attr("y", 10)
-                            .attr("width", 50)
-                            .attr("height", 100);*/
         svg.append("g")
         .attr("class", "axis")
         .attr("transform", "translate(" + padding + ",0)")
@@ -328,38 +409,94 @@ function dodajMeritve() {
         svg.append("text")
         .attr("transform", "rotate(-90)")
         .attr("y", 40)
-        .attr("x",60 - (h / 2))
+        .attr("x", 60 - (h / 2))
         .attr("dy", "1em")
         .style("text-anchor", "start")
         .style("fill","#182948")
+        .attr("font-family", "sans-serif")
         .text("Vrednost");
+        
+        svg.append("text")
+        .attr("x", w - 120)
+        .attr("y", 20)
+        .style("text-anchor", "start")
+        .style("fill","#182948")
+        .attr("font-family", "sans-serif")
+        .text("Legenda:");
+        svg.append("text")
+        .attr("x", w - 120)
+        .attr("y", 35)
+        .style("text-anchor", "start")
+        .style("fill","black")
+        .attr("font-family", "sans-serif")
+        .text("Nekoliko preveč");
+         svg.append("text")
+        .attr("x", w - 120)
+        .attr("y", 50)
+        .style("text-anchor", "start")
+        .style("fill","#D7D700")
+        .attr("font-family", "sans-serif")
+        .text("Precej preveč");
+         svg.append("text")
+        .attr("x", w - 120)
+        .attr("y", 65)
+        .style("text-anchor", "start")
+        .style("fill","red")
+        .attr("font-family", "sans-serif")
+        .text("Zelo nevarno!");
+        svg.append("text")
+        .attr("x", w - 120)
+        .attr("y", 95)
+        .style("text-anchor", "start")
+        .style("fill","#D600D6")
+        .attr("font-family", "sans-serif")
+        .text("Precej Premalo");
+        svg.append("text")
+        .attr("x", w - 120)
+        .attr("y", 80)
+        .style("text-anchor", "start")
+        .style("fill","00D6D6")
+        .attr("font-family", "sans-serif")
+        .text("Premalo");
                
         svg.append("text")
-        .attr("x", 70)
-        .attr("y", 190)
-        .style("fill","black")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 95)
+        .attr("x", 10 - h)
         .style("text-anchor", "start")
+        .style("fill","#8B0000")
+        .attr("font-family", "sans-serif")
+        .attr("font-size", "17px")
         .text("Sistolični krvni tlak");
        
         svg.append("text")
-        .attr("x", 170)
-        .attr("y", 190)
-        .style("fill","black")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 195)
+        .attr("x", 10 - h)
         .style("text-anchor", "start")
+        .style("fill","#8B0000")
+        .attr("font-family", "sans-serif")
+        .attr("font-size", "17px")
         .text("Diastolični krvni tlak");
        
         svg.append("text")
-        .attr("x", 270)
-        .attr("y", 190)
-        .style("fill","black")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 295)
+        .attr("x", 10 - h)
         .style("text-anchor", "start")
+        .style("fill","#8B0000")
+        .attr("font-family", "sans-serif")
+        .attr("font-size", "17px")
         .text("Nasičenost krvi s kisikom");
         
         svg.append("text")
-        .attr("x", 370)
-        .attr("y", 190)
-        .style("fill","black")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 395)
+        .attr("x", 10 - h)
         .style("text-anchor", "start")
+        .style("fill","#8B0000")
+        .attr("font-family", "sans-serif")
+        .attr("font-size", "17px")
         .text("Srčni utrip");
 
 }
@@ -368,6 +505,7 @@ function dodajMeritve() {
 	if (!ehrId || ehrId.trim().length == 0) {
 		$("#dodajMeritveSporocilo").html("<span class='alert alert-info-sm'>Prosim vnesite zahtevane podatke!</span>");
 	} else {
+		graf(sistolicniKrvniTlak, diastolicniKrvniTlak, nasicenostKrviSKisikom, srcniUtrip);
 		$.ajaxSetup({
 		    headers: {"Ehr-Session": sessionId}
 		});
