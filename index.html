@@ -30,8 +30,6 @@
     color: white;
  
 	}
-	
-
   </style>
 
   <script src="knjiznice/js/jquery-2.2.3.min.js"></script>
@@ -69,7 +67,7 @@
   <!-- ZAČETEK: Vsebina aplikacije -->
   <body>
 		<div style="background-color: #182948; color:#FFFFFF; padding: 20px; font-family: Antiqua; font-size: 18px;" class="jumbotron"><h2>eTrening</h2></div>
-		<div id="tukajgenerira"></div><br>
+		<div id="tukajgenerira"></div>
 		<div class="row">
 			<div class="col-lg-6 col-md-6 col-sm-6">
 				<div style="border-color: #182948;" class="panel panel-default">
@@ -137,7 +135,7 @@
 						<div class="input-group"><span class="input-group-addon">EHR ID</span><input id="dodajVitalnoEHR" type="text" class="form-control input-mini" placeholder="315cc752-ce25-48a1-8f6c-4fe9e118233e"></span></div>
 						<br>
 						<button type="button" style="border: 3px solid #0a3c59; color:#FFFFFF; background: #3e779d; margin:auto; display:block; padding: 4.5px 9px; -webkit-border-radius: 30px; -moz-border-radius: 30px;"
-						class="btn btn-default" onclick="dodajMeritve()">Prikaži vitalna odstopanja in podaj nasvet</button><span id="dodajMeritveSporocilo"></span>
+						class="btn btn-default" onclick="vitalnaOdstopanja()">Prikaži vitalna odstopanja in podaj nasvet</button><span id="vitalnaOdstopanjaSporocilo"></span>
 						<br>
 						<div id="opisanoStanje"></div>
 						<div id="opisanoStanje2"></div>
@@ -166,8 +164,6 @@
 	
 	</div>
 
-			
-		
 	</body>
   <!-- KONEC: Vsebina aplikacije -->
 

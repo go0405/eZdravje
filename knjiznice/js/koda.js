@@ -34,15 +34,13 @@ function getSessionId() {
 
  	$("#tukajgenerira").empty();
  	var x = document.getElementById("izberiSportnika");
-    x.remove(1);
-    x.remove(1);
-    x.remove(1);
+    //x.remove(1);
+    //x.remove(1);
+    //x.remove(1);
 
  	var ehrId1 = generirajPodatke(1);
  	var ehrId2 = generirajPodatke(2);
  	var ehrId3 = generirajPodatke(3);
- 	
- 	//$("#tukajgenerira").append("Zgenerirani <strong>EHRid-ji</strong> so: <strong>"+ ehrId1 +"</strong>, <strong>"+ ehrId2 +"</strong> in <strong>"+ ehrId3 +"</strong>");
 
  }
  
@@ -53,33 +51,10 @@ function getSessionId() {
  });
  
 function generirajPodatke(sportnik) {
+	sessionId = getSessionId();
 
-	
-	if(sportnik == 1){
-		$("#tukajgenerira").append("Zgenerirani <strong>EHRid-ji</strong> so: ");
-		var sel = document.getElementById("izberiSportnika");
-		var opt = document.createElement("option");
-		opt.value = "91bcd74e-9be2-4531-a3d5-c8c8347369ea";
-		opt.text = "Tina Maze";
-		sel.add(opt, null);
-	}
-	if(sportnik == 2){
-        var sel = document.getElementById("izberiSportnika");
-		var opt = document.createElement("option");
-		opt.value = "a53d5962-b614-4cc0-8684-64518d7e3f7f";
-		opt.text = "Kevin Kampl";
-		sel.add(opt, null);
-	}
-	if(sportnik == 3){
-        var sel = document.getElementById("izberiSportnika");
-		var opt = document.createElement("option");
-		opt.value = "19bf76fa-1495-44d0-b008-380a85d3874e";
-		opt.text = "Goran Dragič";
-		sel.add(opt, null);
-	}
-
+	//začetek
     var ehrId = "";
-    var sessionId = getSessionId();
 
     var ime, priimek, datumRojstva, spol;
 
@@ -100,53 +75,8 @@ function generirajPodatke(sportnik) {
     	datumRojstva = "1991-01-01T22:03";
     }
 	
-
-	$.ajaxSetup({
-	    headers: {"Ehr-Session": sessionId}
-	});
-	$.ajax({
-	    url: baseUrl + "/ehr",
-	    type: 'POST',
-	    success: function (data) {
-	        var ehrId = data.ehrId;
-	        var partyData = {
-	            firstNames: ime,
-	            lastNames: priimek,
-	            gender: spol,
-	            dateOfBirth: datumRojstva,
-	            partyAdditionalInfo: [{key: "ehrId", value: ehrId}]
-	        };
-	        $.ajax({
-	            url: baseUrl + "/demographics/party",
-	            type: 'POST',
-	            contentType: 'application/json',
-	            data: JSON.stringify(partyData),
-	            success: function (party) {
-					$("#tukajgenerira").append("<strong>"+ ehrId +" </strong>     " + "  ");
-	            },
-	            error: function(err) {
-	                $("#kreirajSporocilo").html("<span class='alert alert-info-sm'>Napaka '" +
-                    JSON.parse(err.responseText).userMessage + "'!");
-	            }
-	        });
-	    }
-	});
-	return ehrId;
-}
-
-
-function kreirajEHR() {
-	sessionId = getSessionId();
-
-	var ime = $("#kreirajIme").val();
-	var priimek = $("#kreirajPriimek").val();
-	var spol = $("#kreirajSpol").val();
-	var datumRojstva = $("#kreirajDatumRojstva").val();
-
-	if (!ime || !priimek || !spol || !datumRojstva || ime.trim().length == 0 ||
-      priimek.trim().length == 0 || spol.trim().length == 0 || datumRojstva.trim().length == 0) {
-		$("#kreirajSporocilo").html("<span class='alert alert-info-sm'>Prosim vnesite zahtevane podatke!</span>");
-	} else {
+	//Roger Federer -- Fedex
+	 if (sportnik == 1) {
 		$.ajaxSetup({
 		    headers: {"Ehr-Session": sessionId}
 		});
@@ -169,24 +99,420 @@ function kreirajEHR() {
 		            data: JSON.stringify(partyData),
 		            success: function (party) {
 		                if (party.action == 'CREATE') {
-		                    $("#kreirajSporocilo").html("<span class='alert alert-info-sm'>Uspešno kreiran EHR '" +
-                          	ehrId + "'.</span>");
-		                    $("#preberiEHRid").val(ehrId);
+		                    var sel = document.getElementById("izberiSportnika");
+							var opt = document.createElement("option");
+							opt.value = ehrId;
+							opt.text = "Roger Federer";
+							sel.add(opt, null);
+		                    //$("#tukajgenerira").val(ehrId);
 		                }
 		            },
 		            error: function(err) {
-		            	$("#kreirajSporocilo").html("<span class='alert alert-info-sm'>Napaka '" +
+		            	$("#tukajgenerira").html("<span class='alert alert-info-sm'>Napaka '" +
                     JSON.parse(err.responseText).userMessage + "'!");
 		            }
 		        });
+		        
+		var datumInUra = "2015-03-07T14:37";
+		var telesnaVisina = "185";
+		var telesnaTeza = "85";
+		var telesnaTemperatura = "36.4";
+		var sistolicniKrvniTlak = "120";
+		var diastolicniKrvniTlak = "90";
+		var nasicenostKrviSKisikom = "99";
+		var srcniUtrip = "92";
+ 	
+		var podatki = {
+		    "ctx/language": "en",
+		    "ctx/territory": "SI",
+		    "ctx/time": datumInUra,
+		    "vital_signs/height_length/any_event/body_height_length": telesnaVisina,
+		    "vital_signs/body_weight/any_event/body_weight": telesnaTeza,
+		   	"vital_signs/body_temperature/any_event/temperature|magnitude": telesnaTemperatura,
+		    "vital_signs/body_temperature/any_event/temperature|unit": "°C",
+		    "vital_signs/blood_pressure/any_event/systolic": sistolicniKrvniTlak,
+		    "vital_signs/blood_pressure/any_event/diastolic": diastolicniKrvniTlak,
+	    	"vital_signs/indirect_oximetry:0/spo2|numerator": nasicenostKrviSKisikom,
+		    "vital_signs/pulse/any_event/rate": srcniUtrip,
+		};
+		var parametriZahteve = {
+		    ehrId: ehrId,
+		    templateId: 'Vital Signs',
+		    format: 'FLAT',
+		};
+		$.ajax({
+		    url: baseUrl + "/composition?" + $.param(parametriZahteve),
+		    type: 'POST',
+		    contentType: 'application/json',
+		    data: JSON.stringify(podatki),
+		    success: function (res) {
+
+		    },
+		    error: function(err) {
+		    	$("#tukajgenerira").html(
+            "<span class='alert alert-info-sm'>Napaka '" +
+            JSON.parse(err.responseText).userMessage + "'!");
+		    }
+		})
+	  }
+	});
+		
+	
+	 }
+	 //Anže Kopitar -- Kopi Star
+	 if (sportnik == 2) {
+		$.ajaxSetup({
+		    headers: {"Ehr-Session": sessionId}
+		});
+		$.ajax({
+		    url: baseUrl + "/ehr",
+		    type: 'POST',
+		    success: function (data) {
+		        var ehrId = data.ehrId;
+		        var partyData = {
+		            firstNames: ime,
+		            lastNames: priimek,
+		            gender: spol,
+		            dateOfBirth: datumRojstva,
+		            partyAdditionalInfo: [{key: "ehrId", value: ehrId}]
+		        };
+		        $.ajax({
+		            url: baseUrl + "/demographics/party",
+		            type: 'POST',
+		            contentType: 'application/json',
+		            data: JSON.stringify(partyData),
+		            success: function (party) {
+		                if (party.action == 'CREATE') {
+		                    var sel = document.getElementById("izberiSportnika");
+							var opt = document.createElement("option");
+							opt.value = ehrId;
+							opt.text = "Anže Kopitar";
+							sel.add(opt, null);
+		                }
+		            },
+		            error: function(err) {
+		            	$("#tukajgenerira").html("<span class='alert alert-info-sm'>Napaka '" +
+                    JSON.parse(err.responseText).userMessage + "'!");
+		            }
+		        });
+
+		var podatki = {
+		    "ctx/language": "en",
+		    "ctx/territory": "SI",
+		    "ctx/time": "2016-02-02T12:32",
+		    "vital_signs/height_length/any_event/body_height_length": "192",
+		    "vital_signs/body_weight/any_event/body_weight": "100",
+		   	"vital_signs/body_temperature/any_event/temperature|magnitude": "36.2",
+		    "vital_signs/body_temperature/any_event/temperature|unit": "°C",
+		    "vital_signs/blood_pressure/any_event/systolic": "118",
+		    "vital_signs/blood_pressure/any_event/diastolic": "92",
+	    	"vital_signs/indirect_oximetry:0/spo2|numerator": "95",
+		    "vital_signs/pulse/any_event/rate": "102",
+		};
+		var parametriZahteve = {
+		    ehrId: ehrId,
+		    templateId: 'Vital Signs',
+		    format: 'FLAT',
+		};
+		$.ajax({
+		    url: baseUrl + "/composition?" + $.param(parametriZahteve),
+		    type: 'POST',
+		    contentType: 'application/json',
+		    data: JSON.stringify(podatki),
+		    success: function (res) {
+
+		    },
+		    error: function(err) {
+		    	$("#tukajgenerira").html(
+            "<span class='alert alert-info-sm'>Napaka '" +
+            JSON.parse(err.responseText).userMessage + "'!");
+		    }
+		})
+		podatki = {
+		    "ctx/language": "en",
+		    "ctx/territory": "SI",
+		    "ctx/time": "2016-03-05T16:32",
+		    "vital_signs/height_length/any_event/body_height_length": "192",
+		    "vital_signs/body_weight/any_event/body_weight": "97",
+		   	"vital_signs/body_temperature/any_event/temperature|magnitude": "36.9",
+		    "vital_signs/body_temperature/any_event/temperature|unit": "°C",
+		    "vital_signs/blood_pressure/any_event/systolic": "120",
+		    "vital_signs/blood_pressure/any_event/diastolic": "80",
+	    	"vital_signs/indirect_oximetry:0/spo2|numerator": "77",
+		    "vital_signs/pulse/any_event/rate": "80",
+		};
+		var parametriZahteve = {
+		    ehrId: ehrId,
+		    templateId: 'Vital Signs',
+		    format: 'FLAT',
+		};
+		$.ajax({
+		    url: baseUrl + "/composition?" + $.param(parametriZahteve),
+		    type: 'POST',
+		    contentType: 'application/json',
+		    data: JSON.stringify(podatki),
+		    success: function (res) {
+
+		    },
+		    error: function(err) {
+		    	$("#tukajgenerira").html(
+            "<span class='alert alert-info-sm'>Napaka '" +
+            JSON.parse(err.responseText).userMessage + "'!");
+		    }
+		})
+		podatki = {
+		    "ctx/language": "en",
+		    "ctx/territory": "SI",
+		    "ctx/time": "2016-02-07T15:47",
+		    "vital_signs/height_length/any_event/body_height_length": "192",
+		    "vital_signs/body_weight/any_event/body_weight": "103",
+		   	"vital_signs/body_temperature/any_event/temperature|magnitude": "37.2",
+		    "vital_signs/body_temperature/any_event/temperature|unit": "°C",
+		    "vital_signs/blood_pressure/any_event/systolic": "124",
+		    "vital_signs/blood_pressure/any_event/diastolic": "70",
+	    	"vital_signs/indirect_oximetry:0/spo2|numerator": "97",
+		    "vital_signs/pulse/any_event/rate": "70",
+		};
+		var parametriZahteve = {
+		    ehrId: ehrId,
+		    templateId: 'Vital Signs',
+		    format: 'FLAT',
+		};
+		$.ajax({
+		    url: baseUrl + "/composition?" + $.param(parametriZahteve),
+		    type: 'POST',
+		    contentType: 'application/json',
+		    data: JSON.stringify(podatki),
+		    success: function (res) {
+
+		    },
+		    error: function(err) {
+		    	$("#tukajgenerira").html(
+            "<span class='alert alert-info-sm'>Napaka '" +
+            JSON.parse(err.responseText).userMessage + "'!");
+		    }
+		})
+		podatki = {
+		    "ctx/language": "en",
+		    "ctx/territory": "SI",
+		    "ctx/time": "2016-04-07T11:37",
+		    "vital_signs/height_length/any_event/body_height_length": "192",
+		    "vital_signs/body_weight/any_event/body_weight": "95",
+		   	"vital_signs/body_temperature/any_event/temperature|magnitude": "36.3",
+		    "vital_signs/body_temperature/any_event/temperature|unit": "°C",
+		    "vital_signs/blood_pressure/any_event/systolic": "120",
+		    "vital_signs/blood_pressure/any_event/diastolic": "77",
+	    	"vital_signs/indirect_oximetry:0/spo2|numerator": "96",
+		    "vital_signs/pulse/any_event/rate": "87",
+		};
+		var parametriZahteve = {
+		    ehrId: ehrId,
+		    templateId: 'Vital Signs',
+		    format: 'FLAT',
+		};
+		$.ajax({
+		    url: baseUrl + "/composition?" + $.param(parametriZahteve),
+		    type: 'POST',
+		    contentType: 'application/json',
+		    data: JSON.stringify(podatki),
+		    success: function (res) {
+
+		    },
+		    error: function(err) {
+		    	$("#tukajgenerira").html(
+            "<span class='alert alert-info-sm'>Napaka '" +
+            JSON.parse(err.responseText).userMessage + "'!");
+		    }
+		})  
+		   
+		   
+		   
+		   
+		   
+		   
+		   
+		   
+		   
+		   
+		   
 		    }
 		});
-	}
+		
+	 }
+
+	 //Jaka Hvala -- Jurke
+	 if (sportnik == 3) {
+		$.ajaxSetup({
+		    headers: {"Ehr-Session": sessionId}
+		});
+		$.ajax({
+		    url: baseUrl + "/ehr",
+		    type: 'POST',
+		    success: function (data) {
+		        var ehrId = data.ehrId;
+		        var partyData = {
+		            firstNames: ime,
+		            lastNames: priimek,
+		            gender: spol,
+		            dateOfBirth: datumRojstva,
+		            partyAdditionalInfo: [{key: "ehrId", value: ehrId}]
+		        };
+		        $.ajax({
+		            url: baseUrl + "/demographics/party",
+		            type: 'POST',
+		            contentType: 'application/json',
+		            data: JSON.stringify(partyData),
+		            success: function (party) {
+		                if (party.action == 'CREATE') {
+		                    var sel = document.getElementById("izberiSportnika");
+							var opt = document.createElement("option");
+							opt.value = ehrId;
+							opt.text = "Jaka Hvala";
+							sel.add(opt, null);
+		                }
+		            },
+		            error: function(err) {
+		            	$("#tukajgenerira").html("<span class='alert alert-info-sm'>Napaka '" +
+                    JSON.parse(err.responseText).userMessage + "'!");
+		            }
+		        });
+
+		var podatki = {
+		    "ctx/language": "en",
+		    "ctx/territory": "SI",
+		    "ctx/time": "2016-05-29T07:31",
+		    "vital_signs/height_length/any_event/body_height_length": "178",
+		    "vital_signs/body_weight/any_event/body_weight": "61",
+		   	"vital_signs/body_temperature/any_event/temperature|magnitude": "37.0",
+		    "vital_signs/body_temperature/any_event/temperature|unit": "°C",
+		    "vital_signs/blood_pressure/any_event/systolic": "137",
+		    "vital_signs/blood_pressure/any_event/diastolic": "70",
+	    	"vital_signs/indirect_oximetry:0/spo2|numerator": "88",
+		    "vital_signs/pulse/any_event/rate": "70",
+		};
+		var parametriZahteve = {
+		    ehrId: ehrId,
+		    templateId: 'Vital Signs',
+		    format: 'FLAT',
+		};
+		$.ajax({
+		    url: baseUrl + "/composition?" + $.param(parametriZahteve),
+		    type: 'POST',
+		    contentType: 'application/json',
+		    data: JSON.stringify(podatki),
+		    success: function (res) {
+
+		    },
+		    error: function(err) {
+		    	$("#tukajgenerira").html(
+            "<span class='alert alert-info-sm'>Napaka '" +
+            JSON.parse(err.responseText).userMessage + "'!");
+		    }
+		})
+		podatki = {
+		    "ctx/language": "en",
+		    "ctx/territory": "SI",
+		    "ctx/time": "2016-05-30T17:51",
+		    "vital_signs/height_length/any_event/body_height_length": "178",
+		    "vital_signs/body_weight/any_event/body_weight": "65",
+		   	"vital_signs/body_temperature/any_event/temperature|magnitude": "35.7",
+		    "vital_signs/body_temperature/any_event/temperature|unit": "°C",
+		    "vital_signs/blood_pressure/any_event/systolic": "122",
+		    "vital_signs/blood_pressure/any_event/diastolic": "81",
+	    	"vital_signs/indirect_oximetry:0/spo2|numerator": "99",
+		    "vital_signs/pulse/any_event/rate": "80",
+		};
+		var parametriZahteve = {
+		    ehrId: ehrId,
+		    templateId: 'Vital Signs',
+		    format: 'FLAT',
+		};
+		$.ajax({
+		    url: baseUrl + "/composition?" + $.param(parametriZahteve),
+		    type: 'POST',
+		    contentType: 'application/json',
+		    data: JSON.stringify(podatki),
+		    success: function (res) {
+
+		    },
+		    error: function(err) {
+		    	$("#tukajgenerira").html(
+            "<span class='alert alert-info-sm'>Napaka '" +
+            JSON.parse(err.responseText).userMessage + "'!");
+		    }
+		})
+			 
+		podatki = {
+		    "ctx/language": "en",
+		    "ctx/territory": "SI",
+		    "ctx/time": "2016-05-31T18:42",
+		    "vital_signs/height_length/any_event/body_height_length": "178",
+		    "vital_signs/body_weight/any_event/body_weight": "62",
+		   	"vital_signs/body_temperature/any_event/temperature|magnitude": "36.7",
+		    "vital_signs/body_temperature/any_event/temperature|unit": "°C",
+		    "vital_signs/blood_pressure/any_event/systolic": "127",
+		    "vital_signs/blood_pressure/any_event/diastolic": "89",
+	    	"vital_signs/indirect_oximetry:0/spo2|numerator": "97",
+		    "vital_signs/pulse/any_event/rate": "67",
+		};
+		var parametriZahteve = {
+		    ehrId: ehrId,
+		    templateId: 'Vital Signs',
+		    format: 'FLAT',
+		};
+		$.ajax({
+		    url: baseUrl + "/composition?" + $.param(parametriZahteve),
+		    type: 'POST',
+		    contentType: 'application/json',
+		    data: JSON.stringify(podatki),
+		    success: function (res) {
+
+		    },
+		    error: function(err) {
+		    	$("#tukajgenerira").html(
+            "<span class='alert alert-info-sm'>Napaka '" +
+            JSON.parse(err.responseText).userMessage + "'!");
+		    }
+		})
+		podatki = {
+		    "ctx/language": "en",
+		    "ctx/territory": "SI",
+		    "ctx/time": "2016-06-01T00:18",
+		    "vital_signs/height_length/any_event/body_height_length": "178",
+		    "vital_signs/body_weight/any_event/body_weight": "68",
+		   	"vital_signs/body_temperature/any_event/temperature|magnitude": "36.4",
+		    "vital_signs/body_temperature/any_event/temperature|unit": "°C",
+		    "vital_signs/blood_pressure/any_event/systolic": "111",
+		    "vital_signs/blood_pressure/any_event/diastolic": "60",
+	    	"vital_signs/indirect_oximetry:0/spo2|numerator": "94",
+		    "vital_signs/pulse/any_event/rate": "99",
+		};
+		var parametriZahteve = {
+		    ehrId: ehrId,
+		    templateId: 'Vital Signs',
+		    format: 'FLAT',
+		};
+		$.ajax({
+		    url: baseUrl + "/composition?" + $.param(parametriZahteve),
+		    type: 'POST',
+		    contentType: 'application/json',
+		    data: JSON.stringify(podatki),
+		    success: function (res) {
+
+		    },
+		    error: function(err) {
+		    	$("#tukajgenerira").html(
+            "<span class='alert alert-info-sm'>Napaka '" +
+            JSON.parse(err.responseText).userMessage + "'!");
+		    }
+		})
+
+		
+		    }
+		});
+	 }
+	return ehrId;
 }
-
-
-
-
 
 function graf(sistol, diastol, kisik, utrip){
  		var sis = ((sistol - 50)*2) + 27;
@@ -443,7 +769,7 @@ var st5 = 0;
 var stevec2 = 0;
 
 
-function dodajMeritve() {
+function vitalnaOdstopanja() {
 	sessionId = getSessionId();
 	var ehrId = $("#dodajVitalnoEHR").val();
 	
@@ -582,7 +908,7 @@ function dodajMeritve() {
 								}else if(srcniUtrip >= 95){
 									stanje3 += "Na podlagi srčnega utripa se treningi se izkazujejo za zelo primerne. "; stevec2++;
 								}else if(srcniUtrip >= 80){
-									stanje3 += "Športnik je bolj sposoben kot si predstavljate. "; stevec2++;
+									stanje3 += "Športnik je pripravljen na resnejše treninge. "; stevec2++;
 								}else if(srcniUtrip >= 70){
 									stanje3 += "Treningi te vrste za vašega atleta ne predstavljajo nobenih težav, saj ima nizek srčni utrip. "; stevec2++;
 								}else if(srcniUtrip >= 55){
@@ -628,51 +954,11 @@ function dodajMeritve() {
 		stanje += "S športnikm je nekaj narobe, svetujem pregled pri zdravniku. "; stevec2++;
 	}*/
 
-	$("#dodajMeritveSporocilo").empty();
+	$("#vitalnaOdstopanjaSporocilo").empty();
 	$("#graf").empty();
 
 	if (ehrId == 0) {
-		$("#dodajMeritveSporocilo").html("<span class='alert alert-info-sm'>Prosim vnesite zahtevane podatke!</span>");
-	} else {
-		//graf(sistolicniKrvniTlak, diastolicniKrvniTlak, nasicenostKrviSKisikom, srcniUtrip);
-
-
-        //$("#opisanoStanje2").html("<br/><span><b>Izpis:</b></span>");
-		/*$.ajaxSetup({
-		    headers: {"Ehr-Session": sessionId}
-		});
-		var podatki = {
-		    "ctx/language": "en",
-		    "ctx/territory": "SI",
-		    "ctx/time": datumInUra,
-		    "vital_signs/height_length/any_event/body_height_length": telesnaVisina,
-		    "vital_signs/body_weight/any_event/body_weight": telesnaTeza,
-		   	"vital_signs/body_temperature/any_event/temperature|magnitude": telesnaTemperatura,
-		    "vital_signs/body_temperature/any_event/temperature|unit": "°C",
-		    "vital_signs/blood_pressure/any_event/systolic": sistolicniKrvniTlak,
-		    "vital_signs/blood_pressure/any_event/diastolic": diastolicniKrvniTlak,
-		    "vital_signs/indirect_oximetry:0/spo2|numerator": nasicenostKrviSKisikom,
-		    "vital_signs/pulse/any_event/rate": srcniUtrip,
-		};
-		var parametriZahteve = {
-		    ehrId: ehrId,
-		    templateId: 'Vital Signs',
-		    format: 'FLAT',
-		};
-		$.ajax({
-		    url: baseUrl + "/composition?" + $.param(parametriZahteve),
-		    type: 'POST',
-		    contentType: 'application/json',
-		    data: JSON.stringify(podatki),
-		    success: function (res) {
-
-		    },
-		    error: function(err) {
-		    	$("#dodajMeritveSporocilo").html(
-            "<span class='alert alert-info-sm'>Napaka '" +
-            JSON.parse(err.responseText).userMessage + "'!");
-		    }
-		});*/
+		$("#vitalnaOdstopanjaSporocilo").html("<span class='alert alert-info-sm'>Prosim vnesite zahtevane podatke!</span>");
 	}
 }
 
