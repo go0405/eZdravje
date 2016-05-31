@@ -75,55 +75,6 @@
 				<div style="border-color: #182948;" class="panel panel-default">
 					<div style="color: #ffffff; background-color: #182948; font-family: Lucida Sans Unicode;" class="panel-heading">
 						<div class="row">
-							<div class="col-lg-4 col-md-4 col-sm-4">Kreiraj <b>EHR</b> za športnika:</div>
-						</div>
-					</div>
-					<div class="panel-body">
-						<div class="input-group"><span class="input-group-addon">Ime</span><input id="kreirajIme" type="text" class="form-control input-mini" placeholder="Rafael"></div>
-						<div class="input-group"><span class="input-group-addon">Priimek</span><input id="kreirajPriimek" type="text" class="form-control" placeholder="Nadal"></div>
-						<div class="input-group"><span class="input-group-addon">Spol</span><input id="kreirajSpol" type="text" class="form-control" placeholder="MALE"></div>
-						<div class="input-group"><span class="input-group-addon">Datum rojstva</span><input id="kreirajDatumRojstva" type="text" class="form-control" placeholder="1986-06-03T10:52"></div>
-						<br>
-						<button type="button" style="border: 3px solid #0a3c59; color:#FFFFFF; background: #3e779d; margin:auto; display:block; padding: 4.5px 9px; -webkit-border-radius: 30px; -moz-border-radius: 30px;"
-						class="btn btn-default" onclick="kreirajEHR()">Dodaj osnovne podatke</button><span id="kreirajSporocilo"></span>
-						</div>
-				</div>
-			</div>
-			<div class="col-lg-6 col-md-6 col-sm-6">
-				<div style="border-color: #182948;" class="panel panel-default">
-					<div style="color: #ffffff; background-color: #182948; font-family: Lucida Sans Unicode;" class="panel-heading">
-						<div class="row">
-							<div class="col-lg-4 col-md-4 col-sm-4">Vnos <b>meritev</b>:</b></div>
-						</div>
-					</div>
-					<div class="panel-body">
-						<div class="input-group"><span class="input-group-addon">EHR ID</span><input id="dodajVitalnoEHR" type="text" class="form-control input-mini" placeholder="315cc752-ce25-48a1-8f6c-4fe9e118233e"></span></div>
-						<div class="input-group"><span class="input-group-addon">Datum in ura</span><input id="dodajVitalnoDatumInUra" type="text" class="form-control input-mini" placeholder="2014-12-21T11:40Z"></span></div>
-						<div class="input-group"><span class="input-group-addon">Telesna višina</span><input id="dodajVitalnoTelesnaVisina" type="text" class="form-control input-mini" placeholder="175"><span class="input-group-addon">cm</span></div>
-						<div class="input-group"><span class="input-group-addon">Telesna teža</span><input id="dodajVitalnoTelesnaTeza" type="text" class="form-control input-mini" placeholder="60.00"><span class="input-group-addon">kg</span></div>
-					  <div class="input-group"><span class="input-group-addon">Telesna temperatura</span><input id="dodajVitalnoTelesnaTemperatura" type="text" class="form-control input-mini" placeholder="36.50"><span class="input-group-addon">°C</span></div>
-						<div class="input-group"><span class="input-group-addon">Sistolični krvni tlak</span><input id="dodajVitalnoKrvniTlakSistolicni" type="text" class="form-control input-mini" placeholder="108"><span class="input-group-addon">mm Hg</span></div>
-					  <div class="input-group"><span class="input-group-addon">Diastolični krvni tlak</span><input id="dodajVitalnoKrvniTlakDiastolicni" type="text" class="form-control input-mini" placeholder="92"><span class="input-group-addon">mm Hg</span></div>
-						<div class="input-group"><span class="input-group-addon">Nasičenost krvi s kisikom</span><input id="dodajVitalnoNasicenostKrviSKisikom" type="text" class="form-control input-mini" placeholder="98"><span class="input-group-addon">%</span></div>
-						<div class="input-group"><span class="input-group-addon">Srčni Utrip</span><input id="dodajVitalnoSrcniUtrip" type="text" class="form-control input-mini" placeholder="60.0"><span class="input-group-addon">/min</span></div>
-						<br>
-						<button type="button" style="border: 3px solid #0a3c59; color:#FFFFFF; background: #3e779d; margin:auto; display:block; padding: 4.5px 9px; -webkit-border-radius: 30px; -moz-border-radius: 30px;"
-						class="btn btn-default" onclick="dodajMeritve()">Dodaj meritve in preveri stanje</button><span id="dodajMeritveSporocilo"></span>
-						<br>
-						<div id="opisanoStanje"></div>
-						<div id="opisanoStanje2"></div>
-						<div id="graf"></div>	
-				</div>
-				
-					</div>
-			</div>
-
-		</div>
-		<div class="row">
-			<div class="col-lg-6 col-md-6 col-sm-6">
-				<div style="border-color: #182948;" class="panel panel-default">
-					<div style="color: #ffffff; background-color: #182948; font-family: Lucida Sans Unicode;" class="panel-heading">
-						<div class="row">
 							<div class="col-lg-4 col-md-4 col-sm-4">Pregled <b>povprečja</b> meritev:</div>
 							
 							<div class="col-lg-4 col-md-4 col-sm-4"><select class="form-control" id="izberiSportnika"><option value=""></option></select></div>
@@ -175,8 +126,32 @@
 				</div>
 	
 	</div>
+			<div class="col-lg-6 col-md-6 col-sm-6">
+				<div style="border-color: #182948;" class="panel panel-default">
+					<div style="color: #ffffff; background-color: #182948; font-family: Lucida Sans Unicode;" class="panel-heading">
+						<div class="row">
+							<div class="col-lg-4 col-md-4 col-sm-4">Pregled <b>vitalnih odstopanj</b>:</div>
+						</div>
+					</div>
+					<div class="panel-body">
+						<div class="input-group"><span class="input-group-addon">EHR ID</span><input id="dodajVitalnoEHR" type="text" class="form-control input-mini" placeholder="315cc752-ce25-48a1-8f6c-4fe9e118233e"></span></div>
+						<br>
+						<button type="button" style="border: 3px solid #0a3c59; color:#FFFFFF; background: #3e779d; margin:auto; display:block; padding: 4.5px 9px; -webkit-border-radius: 30px; -moz-border-radius: 30px;"
+						class="btn btn-default" onclick="dodajMeritve()">Prikaži vitalna odstopanja in podaj nasvet</button><span id="dodajMeritveSporocilo"></span>
+						<br>
+						<div id="opisanoStanje"></div>
+						<div id="opisanoStanje2"></div>
+						<div id="opisanoStanje3"></div>
+						</br>
+						<div id="graf"></div>	
+				</div>
+				
+					</div>
+			</div>
 
-<div class="col-lg-6 col-md-6 col-sm-6">
+		</div>
+		<div class="row">
+			<div class="col-lg-6 col-md-6 col-sm-6">
 	<div style="border-color: #182948;" class="panel panel-default">
 					<div style="color: #ffffff; background-color: #182948; font-family: Lucida Sans Unicode;" class="panel-heading">
 						<div class="row">
@@ -184,8 +159,14 @@
 
 						</div>
 					</div>
-<div id="graf"></div>	
-				  	</div>				
+
+				  	</div>	
+				  	
+				</div>
+	
+	</div>
+
+			
 		
 	</body>
   <!-- KONEC: Vsebina aplikacije -->

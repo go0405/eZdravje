@@ -185,78 +185,10 @@ function kreirajEHR() {
 }
 
 
-var stanje = "";
-var stevec2 = 0;
-
-function dodajMeritve() {
-	sessionId = getSessionId();
-	var ehrId = $("#dodajVitalnoEHR").val();
-	var datumInUra = $("#dodajVitalnoDatumInUra").val();
-	var telesnaVisina = $("#dodajVitalnoTelesnaVisina").val();
-	var telesnaTeza = $("#dodajVitalnoTelesnaTeza").val();
-	var telesnaTemperatura = $("#dodajVitalnoTelesnaTemperatura").val();
-	var sistolicniKrvniTlak = $("#dodajVitalnoKrvniTlakSistolicni").val();
-	var diastolicniKrvniTlak = $("#dodajVitalnoKrvniTlakDiastolicni").val();
-	var nasicenostKrviSKisikom = $("#dodajVitalnoNasicenostKrviSKisikom").val();
-	var srcniUtrip = $("#dodajVitalnoSrcniUtrip").val();
-
-	if(telesnaTemperatura >= 39){
-		stanje += "Športnik je v nevarnosti, obiščite zdravnika! "; stevec2++;
-	}if(telesnaTemperatura >= 38 && telesnaTemperatura < 39){
-		stanje += "Nekaj časa bo potrebno počivati. "; stevec2++;
-	}if(telesnaTemperatura <= 35){
-		stanje += "Športnik je podhlajen. "; stevec2++;
-	}if(telesnaVisina < parseInt(telesnaTeza) + 80){
-		stanje += "BMI športnika je krepko nad povprečjem, za naslednji trening svetujem kardio. "; stevec2++;
-	}else if(telesnaVisina < parseInt(telesnaTeza) + 90){
-		stanje += "BMI športnika je prevelik, za naslednji trening svetujem kardio. "; stevec2++;
-	}if(telesnaVisina > parseInt(telesnaTeza) + 110){
-		stanje += "BMI športnika je premajhen, potrebno je uživanje ogljikovih hidratov. "; stevec2++;
-	}if(sistolicniKrvniTlak >= 180){
-		stanje += "Športnikov sistolični krvni tlak je šel čez vse meje. Nujno k zdravniku. "; stevec2++;
-	}else if(sistolicniKrvniTlak >= 160){
-		stanje += "Športnikov sistolični krvni tlak je precej previsok. Posvetujte se z zdravnikom. "; stevec2++;
-	}else if(sistolicniKrvniTlak > 140){
-		stanje += "Športnikov sistolični krvni tlak je malenkost previsok. Opazujte naslednjo meritev. "; stevec2++;
-	}if(diastolicniKrvniTlak >= 110){
-		stanje += "Športnikov diastolični krvni tlak je šel čez vse meje. Nujno k zdravniku. "; stevec2++;
-	}else if(diastolicniKrvniTlak >= 100){
-		stanje += "Športnikov diastolični krvni tlak je precej previsok. Posvetujte se z zdravnikom. "; stevec2++;
-	}else if(diastolicniKrvniTlak > 90){
-		stanje += "Športnikov diastolični krvni tlak je malenkost previsok. Opazujte naslednjo meritev. "; stevec2++;
-	}if(nasicenostKrviSKisikom <= 85){
-		stanje += "Športnik ima v krvi premalo kisika. Nujno pojdite k zdravniku. "; stevec2++;
-	}else if(nasicenostKrviSKisikom <= 90){
-		stanje += "Športnik ima v krvi premalo kisika. Če znate mu dovedite kisik, če tega ne obvladate pojdite k zdravniku. "; stevec2++;
-	}else if(nasicenostKrviSKisikom > 100){
-		stanje += "Napaka pri vnosu podatkov, saj v krvi ne more biti več kot 100% kisika. "; stevec2++;
-	}else if(srcniUtrip < 55){
-		stanje += "S športnikm je nekaj narobe, svetujem pregled pri zdravniku. "; stevec2++;
-	}if(srcniUtrip >= 120){
-		stanje += "Srce mu razbija kot noro, upajmo da bo preživel. "; stevec2++;
-	}else if(srcniUtrip >= 110){
-		stanje += "Vašega atleta ste danes pognali do roba njegovih zmožnosti. "; stevec2++;
-	}else if(srcniUtrip >= 95){
-		stanje += "Današnji trening se je izkazal za zelo primernega. "; stevec2++;
-	}else if(srcniUtrip >= 80){
-		stanje += "Športnik je bolj sposoben kot si predstavljate. "; stevec2++;
-	}else if(srcniUtrip >= 70){
-		stanje += "Današnji trening za vašega atleta ni predstavljal nobenih težav. "; stevec2++;
-	}else if(srcniUtrip >= 55){
-		stanje += "To pa ni bil pravi trening, saj se športnik sploh ni zadihal. "; stevec2++;
-	}
-	
-	if(stevec2 == 0){
-		stanje = "Športnik je v odličnem stanju za trening! "
-	}
-	
-	$("#dodajMeritveSporocilo").empty();
-	$("#graf").empty();
-	
-	stevec2 = 0;
 
 
-	function graf(sistol, diastol, kisik, utrip){
+
+function graf(sistol, diastol, kisik, utrip){
  		var sis = ((sistol - 50)*2) + 27;
  		var dis = ((diastol - 50)*2) + 27;
  		var kis = ((kisik - 50)*2) + 27;
@@ -502,11 +434,211 @@ function dodajMeritve() {
 }
 
 
-	if (!ehrId || ehrId.trim().length == 0) {
+var stanje = "";
+var stanje2 = "";
+var stanje3 = "";
+var stevec3 = 0;
+var stevec4 = 0;
+var st5 = 0;
+var stevec2 = 0;
+
+
+function dodajMeritve() {
+	sessionId = getSessionId();
+	var ehrId = $("#dodajVitalnoEHR").val();
+	
+	var sistolicniKrvniTlak = 0;
+	var diastolicniKrvniTlak = 0;
+	var nasicenostKrviSKisikom = 0;
+	var srcniUtrip = 0; 
+	var datumInUra = 0;
+	var telesnaVisina = 0;
+	var telesnaTeza = 0;
+	var telesnaTemperatura = 0;
+	var st5 = 0;
+	$("#opisanoStanje").empty();
+	$("#opisanoStanje2").empty();
+	$("#opisanoStanje3").empty();
+	//tu delamo
+
+		$.ajax({
+			url: baseUrl + "/demographics/ehr/" + ehrId + "/party",
+	    	type: 'GET',
+	    	headers: {"Ehr-Session": sessionId},
+	    	success: function (data) {
+				var party = data.party;
+					
+					$.ajax({
+	 			    url: baseUrl + "/view/" + ehrId + "/" + "blood_pressure",
+				    type: 'GET',
+				    headers: {"Ehr-Session": sessionId},
+				    success: function (res) {
+				    	if (res.length >= 0) {
+					    	for (var i in res) {
+								sistolicniKrvniTlak += res[i].systolic;
+								diastolicniKrvniTlak += res[i].diastolic;
+								stevec3++;
+								stevec4++;
+					        }
+					        sistolicniKrvniTlak /= stevec3;
+					        diastolicniKrvniTlak /= stevec4;
+					        if(sistolicniKrvniTlak >= 180){
+					        	stanje += "Športnikov sistolični krvni tlak je šel čez vse meje. Nujno k zdravniku. ";
+							}else if(sistolicniKrvniTlak >= 160){
+								stanje += "Športnikov sistolični krvni tlak je precej previsok. Posvetujte se z zdravnikom. ";
+							}else if(sistolicniKrvniTlak > 140){
+								stanje += "Športnikov sistolični krvni tlak je malenkost previsok. Opazujte naslednjo meritev. ";
+							}if(diastolicniKrvniTlak >= 110){
+								stanje += "Športnikov diastolični krvni tlak je šel čez vse meje. Nujno k zdravniku. ";
+							}else if(diastolicniKrvniTlak >= 100){
+								stanje += "Športnikov diastolični krvni tlak je precej previsok. Posvetujte se z zdravnikom. ";
+							}else if(diastolicniKrvniTlak > 90){
+								stanje += "Športnikov diastolični krvni tlak je malenkost previsok. Opazujte naslednjo meritev. ";
+							}
+							$("#opisanoStanje").html("<br/><span><b>Nasvet: </b>" + stanje +"</span>");
+								if(st5 == 2){
+									graf(sistolicniKrvniTlak, diastolicniKrvniTlak, nasicenostKrviSKisikom, srcniUtrip);
+								}	
+					        stevec3 = 0;
+					        stevec4 = 0;
+					        st5++;
+					        stanje = "";
+				    	}
+				    },	
+				    error: function() {
+				    	$("#opisanoStanje").html(
+	                "<span class='alert alert-info-sm'>Napaka '" +
+	                JSON.parse(err.responseText).userMessage + "'!");
+				    }
+				});
+	    	}	
+		});
+
+
+		$.ajax({
+			url: baseUrl + "/demographics/ehr/" + ehrId + "/party",
+	    	type: 'GET',
+	    	headers: {"Ehr-Session": sessionId},
+	    	success: function (data) {
+				var party = data.party;
+				$.ajax({
+				    url: baseUrl + "/view/" + ehrId + "/" + "spO2",
+				    type: 'GET',
+				    headers: {"Ehr-Session": sessionId},
+				    success: function (res) {
+				    	if (res.length >= 0) {
+					    	for (var i in res) {
+					           nasicenostKrviSKisikom += res[i].spO2;
+					           stevec3++;
+					        }
+					        nasicenostKrviSKisikom /= stevec3;
+					        if(nasicenostKrviSKisikom <= 85){
+								stanje2 += "Športnik ima v krvi premalo kisika. Nujno pojdite k zdravniku. "; stevec2++;
+							}else if(nasicenostKrviSKisikom <= 90){
+								stanje2 += "Športnik ima v krvi premalo kisika. Če znate mu dovedite kisik, če tega ne obvladate pojdite k zdravniku. "; stevec2++;
+							}else if(nasicenostKrviSKisikom > 100){
+								stanje2 += "Napaka pri vnosu podatkov, saj v krvi ne more biti več kot 100% kisika. "; stevec2++;
+							}
+							$("#opisanoStanje2").append(stanje2);
+					        if(st5 == 2){
+								graf(sistolicniKrvniTlak, diastolicniKrvniTlak, nasicenostKrviSKisikom, srcniUtrip);
+							}	
+ 							st5++;
+					        stevec3 = 0;
+					        stanje2 = "";
+				    	}
+				    },
+				    error: function() {
+				    	$("#opisanoStanje2").html(
+	                "<span class='alert alert-info-sm'>Napaka '" +
+	                JSON.parse(err.responseText).userMessage + "'!");
+				    }
+				});
+	    	}	
+		});
+
+
+		$.ajax({
+				url: baseUrl + "/demographics/ehr/" + ehrId + "/party",
+		    	type: 'GET',
+		    	headers: {"Ehr-Session": sessionId},
+		    	success: function (data) {
+					var party = data.party;
+					$.ajax({
+						url: baseUrl + "/view/" + ehrId + "/" + "pulse",
+					    type: 'GET',
+					    headers: {"Ehr-Session": sessionId},
+					    success: function (res) {
+					    	if (res.length >= 0) {
+						    	for (var i in res) {
+						           srcniUtrip += res[i].pulse;
+						           stevec3++;
+						        }
+						        srcniUtrip /= stevec3;
+								if(srcniUtrip >= 120){
+									stanje3 += "Zelo previsok srčni utrip nakazuje, da morate športniku nakloniti nekaj lažjih treningov. "; stevec2++;
+								}else if(srcniUtrip >= 110){
+									stanje3 += "Treningi so na robu atletovih zmožnosti, saj je njegov srčni utrip res visok. "; stevec2++;
+								}else if(srcniUtrip >= 95){
+									stanje3 += "Na podlagi srčnega utripa se treningi se izkazujejo za zelo primerne. "; stevec2++;
+								}else if(srcniUtrip >= 80){
+									stanje3 += "Športnik je bolj sposoben kot si predstavljate. "; stevec2++;
+								}else if(srcniUtrip >= 70){
+									stanje3 += "Treningi te vrste za vašega atleta ne predstavljajo nobenih težav, saj ima nizek srčni utrip. "; stevec2++;
+								}else if(srcniUtrip >= 55){
+									stanje3 += "Športnik se ob vaših treningih sploh ne utrudi. "; stevec2++;
+								}else if(srcniUtrip < 55){
+									stanje3 += "Športnik ima zaskrbljujoče nizek srčni utrip. "; stevec2++;
+								}
+								$("#opisanoStanje3").append(stanje3);
+								if(st5 == 2){
+									graf(sistolicniKrvniTlak, diastolicniKrvniTlak, nasicenostKrviSKisikom, srcniUtrip);
+								}	
+								st5++;
+						        stevec3 = 0;
+						        stanje3 = "";
+					    	}
+					    },
+					    error: function() {
+					    	$("#opisanoStanje3").html(
+		                "<span class='alert alert-info-sm'>Napaka '" +
+		                JSON.parse(err.responseText).userMessage + "'!");
+					    }
+					});
+		
+		    	}	
+			});
+
+
+//konec
+
+	/*if(telesnaTemperatura >= 39){
+		stanje += "Športnik je v nevarnosti, obiščite zdravnika! "; stevec2++;
+	}if(telesnaTemperatura >= 38 && telesnaTemperatura < 39){
+		stanje += "Nekaj časa bo potrebno počivati. "; stevec2++;
+	}if(telesnaTemperatura <= 35){
+		stanje += "Športnik je podhlajen. "; stevec2++;
+	}if(telesnaVisina < parseInt(telesnaTeza) + 80){
+		stanje += "BMI športnika je krepko nad povprečjem, za naslednji trening svetujem kardio. "; stevec2++;
+	}else if(telesnaVisina < parseInt(telesnaTeza) + 90){
+		stanje += "BMI športnika je prevelik, za naslednji trening svetujem kardio. "; stevec2++;
+	}if(telesnaVisina > parseInt(telesnaTeza) + 110){
+		stanje += "BMI športnika je premajhen, potrebno je uživanje ogljikovih hidratov. "; stevec2++;
+	}else if(srcniUtrip < 55){
+		stanje += "S športnikm je nekaj narobe, svetujem pregled pri zdravniku. "; stevec2++;
+	}*/
+
+	$("#dodajMeritveSporocilo").empty();
+	$("#graf").empty();
+
+	if (ehrId == 0) {
 		$("#dodajMeritveSporocilo").html("<span class='alert alert-info-sm'>Prosim vnesite zahtevane podatke!</span>");
 	} else {
-		graf(sistolicniKrvniTlak, diastolicniKrvniTlak, nasicenostKrviSKisikom, srcniUtrip);
-		$.ajaxSetup({
+		//graf(sistolicniKrvniTlak, diastolicniKrvniTlak, nasicenostKrviSKisikom, srcniUtrip);
+
+
+        //$("#opisanoStanje2").html("<br/><span><b>Izpis:</b></span>");
+		/*$.ajaxSetup({
 		    headers: {"Ehr-Session": sessionId}
 		});
 		var podatki = {
@@ -533,16 +665,14 @@ function dodajMeritve() {
 		    contentType: 'application/json',
 		    data: JSON.stringify(podatki),
 		    success: function (res) {
-              $("#opisanoStanje").html("<br/><span><b>Nasvet: </b>" + stanje +"</span>");
-              stanje = "";
-              $("#opisanoStanje2").html("<br/><span><b>Podatki so bili sprejeti!</b></span>");
+
 		    },
 		    error: function(err) {
 		    	$("#dodajMeritveSporocilo").html(
             "<span class='alert alert-info-sm'>Napaka '" +
             JSON.parse(err.responseText).userMessage + "'!");
 		    }
-		});
+		});*/
 	}
 }
 
