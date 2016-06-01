@@ -30,7 +30,7 @@ function getSessionId() {
  * @return ehrId generiranega pacienta
  */
  
- function prikaziTriSportnike(){
+ function generiranjePodatkov(){
 
  	$("#tukajgenerira").empty();
  	var x = document.getElementById("izberiSportnika");
@@ -262,9 +262,6 @@ function dodajMeritve(ehrId, datum, visina, teza, temp, sistol, diastol, nasic, 
 		});
 }
 
-
-
-
 function najdiVadbisca(polozaj) {
 	sessionId = getSessionId();
 
@@ -452,7 +449,7 @@ function najdiVadbisca(polozaj) {
   	
 }
 
-function prikaziBliznjaVadbisca() {
+function prikaziBliznjaVadbiscaInPriporociOddaljenost() {
 	var options = {
 		enableHighAccuracy: true
 	};
@@ -728,9 +725,9 @@ var st5 = 0;
 var stevec2 = 0;
 
 
-function vitalnaOdstopanja() {
+function prikaziVitalnaOdstopanjaInPodajNasvet() {
 	sessionId = getSessionId();
-	var ehrId = $("#dodajVitalnoEHR").val();
+	var ehrId = $("#preglejVitalnoEHR").val();
 	
 	var sistolicniKrvniTlak = 0;
 	var diastolicniKrvniTlak = 0;
@@ -1123,7 +1120,7 @@ function utripPodrobno(){
 		});
 }
 
-function izracunajPovprecje() {
+function preveriPovprecje() {
 	sessionId = getSessionId();
 
 	var ehrId = $("#EHRSportnika").val();

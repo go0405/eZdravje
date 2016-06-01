@@ -58,7 +58,7 @@
         <ul class="nav navbar-nav">
           <li><a href="opis.html">Opis ideje</a></li>
           <li><a href="nacrt.html">Načrt informacijske rešitve</a></li>
-          <li><a href="javascript:prikaziTriSportnike()">Generiranje podatkov</a></li>
+          <li><a href="javascript:generiranjePodatkov()">Generiranje podatkov</a></li>
         </ul>
       </div>
     </div>
@@ -85,9 +85,9 @@
 						
 						<br>
 						<button type="button" style="border: 3px solid #0a3c59; color:#FFFFFF; background: #3e779d; margin:auto; display:block; padding: 4.5px 9px; -webkit-border-radius: 30px; -moz-border-radius: 30px;"
-						class="btn btn-default" onclick="izracunajPovprecje()">Preveri povprečje</button></br>
+						class="btn btn-default" onclick="preveriPovprecje()">Preveri povprečje</button></br>
 						<button type="button" style="border: 3px solid #0a3c59; color:#FFFFFF; background: #3e779d; margin:auto; display:block; padding: 4.5px 9px; -webkit-border-radius: 30px; -moz-border-radius: 30px;"
-				   	class="btn btn-default" onclick="prikaziBliznjaVadbisca()">Prikaži bližnja vadbišča in priporoči oddaljenost</button></br><span id="izracunajPovprecjeSporocilo">	</span>
+				   	class="btn btn-default" onclick="prikaziBliznjaVadbiscaInPriporociOddaljenost()">Prikaži bližnja vadbišča in priporoči oddaljenost</button></br><span id="izracunajPovprecjeSporocilo">	</span>
 						<div id="rezultatPovprecjaSportnika"></div>
 						<br>
 						<table id="povprecno" style="width:100%">
@@ -135,10 +135,10 @@
 						</div>
 					</div>
 					<div class="panel-body">
-						<div class="input-group"><span class="input-group-addon">EHR ID</span><input id="dodajVitalnoEHR" type="text" class="form-control input-mini" placeholder="315cc752-ce25-48a1-8f6c-4fe9e118233e"></span></div>
+						<div class="input-group"><span class="input-group-addon">EHR ID</span><input id="preglejVitalnoEHR" type="text" class="form-control input-mini" placeholder="315cc752-ce25-48a1-8f6c-4fe9e118233e"></span></div>
 						<br>
 						<button type="button" style="border: 3px solid #0a3c59; color:#FFFFFF; background: #3e779d; margin:auto; display:block; padding: 4.5px 9px; -webkit-border-radius: 30px; -moz-border-radius: 30px;"
-						class="btn btn-default" onclick="vitalnaOdstopanja()">Prikaži vitalna odstopanja in podaj nasvet</button><span id="vitalnaOdstopanjaSporocilo"></span>
+						class="btn btn-default" onclick="prikaziVitalnaOdstopanjaInPodajNasvet()">Prikaži vitalna odstopanja in podaj nasvet</button><span id="vitalnaOdstopanjaSporocilo"></span>
 						<br>
 						<div id="opisanoStanje"></div>
 						<div id="opisanoStanje2"></div>
