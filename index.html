@@ -37,6 +37,7 @@
   <script src="knjiznice/js/koda.js"></script>
 
   <script src="//d3js.org/d3.v3.min.js"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBE3ARf53uc0dTVn3xQTU4z-Fc3NbYEoEE&libraries=geometry,places"></script>
 
 </head>
 <body>
@@ -84,7 +85,9 @@
 						
 						<br>
 						<button type="button" style="border: 3px solid #0a3c59; color:#FFFFFF; background: #3e779d; margin:auto; display:block; padding: 4.5px 9px; -webkit-border-radius: 30px; -moz-border-radius: 30px;"
-						class="btn btn-default" onclick="izracunajPovprecje()">Preveri povprečje</button><span id="izracunajPovprecjeSporocilo"></span>
+						class="btn btn-default" onclick="izracunajPovprecje()">Preveri povprečje</button></br>
+						<button type="button" style="border: 3px solid #0a3c59; color:#FFFFFF; background: #3e779d; margin:auto; display:block; padding: 4.5px 9px; -webkit-border-radius: 30px; -moz-border-radius: 30px;"
+				   	class="btn btn-default" onclick="prikaziBliznjaVadbisca()">Prikaži bližnja vadbišča in priporoči oddaljenost</button></br><span id="izracunajPovprecjeSporocilo">	</span>
 						<div id="rezultatPovprecjaSportnika"></div>
 						<br>
 						<table id="povprecno" style="width:100%">
@@ -154,11 +157,14 @@
 					<div style="color: #ffffff; background-color: #182948; font-family: Lucida Sans Unicode;" class="panel-heading">
 						<div class="row">
 							<div class="col-lg-4 col-md-4 col-sm-4"><b>Oddaljenost vadbišča:</b></div>
-
 						</div>
 					</div>
-
-				  	</div>	
+					<div class="panel-body">
+				  <div id="mapSporocilo"></div>
+				  </br>
+				  <div id="map"></div>
+				  
+				  </div>	
 				  	
 				</div>
 	
