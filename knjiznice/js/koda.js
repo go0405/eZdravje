@@ -47,6 +47,7 @@ function getSessionId() {
  $(document).ready(function() {
  		$('#izberiSportnika').change(function() {
 		$("#EHRSportnika").val($(this).val());
+		$("#preglejVitalnoEHR").val($(this).val());
 	});
  });
  
